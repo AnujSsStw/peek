@@ -82,6 +82,7 @@
 // });
 
 import type { BetterAuthOptions, BetterAuthPlugin } from "better-auth";
+import { networkInterfaces } from "os";
 import { expo } from "@better-auth/expo";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
@@ -109,6 +110,7 @@ export function initAuth<
     plugins: [
       oAuthProxy({
         productionURL: options.productionUrl,
+        currentURL: "app://",
       }),
       expo(),
       ...(options.extraPlugins ?? []),
@@ -120,7 +122,14 @@ export function initAuth<
         redirectURI: `${options.productionUrl}/api/auth/callback/google`,
       },
     },
-    trustedOrigins: ["app://"],
+    trustedOrigins: [
+      "app://",
+      "exp://",
+      "https://*.exp.direct",
+      "http://localhost:*",
+      options.productionUrl,
+      options.baseUrl,
+    ],
     onAPIError: {
       onError(error, ctx) {
         console.error("BETTER AUTH API ERROR", error, ctx);
@@ -129,6 +138,21 @@ export function initAuth<
   } satisfies BetterAuthOptions;
 
   return betterAuth(config);
+}
+
+function getNetworkUrl(): string {
+  const interfaces = networkInterfaces();
+  const port = 3000;
+  for (const interfaceName of Object.keys(interfaces)) {
+    const nets = interfaces[interfaceName];
+    if (!nets) continue;
+    for (const net of nets) {
+      if (net.family === "IPv4" && !net.internal) {
+        return `http://${net.address}:${port}`;
+      }
+    }
+  }
+  return `http://localhost:${port}`;
 }
 
 export type Auth = ReturnType<typeof initAuth>;
@@ -143,7 +167,7 @@ const baseUrl =
     ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
     : process.env.VERCEL_ENV === "preview"
       ? `https://${process.env.VERCEL_URL}`
-      : "http://localhost:3000";
+      : getNetworkUrl();
 
 export const auth = initAuth({
   baseUrl,
