@@ -239,7 +239,7 @@ function WidgetImage({ entry }: { entry: WidgetEntry }) {
 export default function PreviewPage() {
   return (
     <div className="min-h-screen bg-[#08080a] px-6 py-16 text-[#eae8e3]">
-      <div className="mx-auto max-w-[1400px]">
+      <div className="mx-auto max-w-350">
         <h1 className="mb-2 font-serif text-4xl font-bold tracking-tight">
           Widget Screenshot Preview
         </h1>
