@@ -146,10 +146,14 @@ export function initAuth<
           },
         },
       },
+      defaultCookieAttributes: {
+        sameSite: "none",
+        secure: true,
+      },
     },
-    account: {
-      skipStateCookieCheck: true,
-    },
+    // account: {
+    //   skipStateCookieCheck: true,
+    // },
   } satisfies BetterAuthOptions;
 
   return betterAuth(config);
