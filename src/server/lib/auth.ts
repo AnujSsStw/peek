@@ -81,14 +81,16 @@
 //   },
 // });
 
-import type { BetterAuthOptions, BetterAuthPlugin } from "better-auth";
-import { networkInterfaces } from "os";
 import { expo } from "@better-auth/expo";
+import type { BetterAuthOptions, BetterAuthPlugin } from "better-auth";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { oAuthProxy } from "better-auth/plugins";
 
 import { db } from "@/lib/db";
+import { nextCookies } from "better-auth/next-js";
+import { headers } from "next/headers";
+import { cache } from "react";
 
 export function initAuth<
   TExtraPlugins extends BetterAuthPlugin[] = [],
@@ -140,34 +142,12 @@ export function initAuth<
   return betterAuth(config);
 }
 
-function getNetworkUrl(): string {
-  const interfaces = networkInterfaces();
-  const port = 3000;
-  for (const interfaceName of Object.keys(interfaces)) {
-    const nets = interfaces[interfaceName];
-    if (!nets) continue;
-    for (const net of nets) {
-      if (net.family === "IPv4" && !net.internal) {
-        return `http://${net.address}:${port}`;
-      }
-    }
-  }
-  return `http://localhost:${port}`;
-}
-
-export type Auth = ReturnType<typeof initAuth>;
-export type Session = Auth["$Infer"]["Session"];
-
-import { cache } from "react";
-import { headers } from "next/headers";
-import { nextCookies } from "better-auth/next-js";
-
 const baseUrl =
   process.env.VERCEL_ENV === "production"
     ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
     : process.env.VERCEL_ENV === "preview"
       ? `https://${process.env.VERCEL_URL}`
-      : getNetworkUrl();
+      : "http://localhost:3000";
 
 export const auth = initAuth({
   baseUrl,
