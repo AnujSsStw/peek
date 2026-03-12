@@ -137,6 +137,16 @@ export function initAuth<
         console.error("BETTER AUTH API ERROR", error, ctx);
       },
     },
+    advanced: {
+      cookies: {
+        state: {
+          attributes: {
+            sameSite: "none",
+            secure: true,
+          },
+        },
+      },
+    },
   } satisfies BetterAuthOptions;
 
   return betterAuth(config);
