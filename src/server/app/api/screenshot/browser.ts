@@ -3,6 +3,10 @@ import puppeteer from "puppeteer-core";
 
 let browser: Browser | null = null;
 
+// Chromium executable path cache + dedup for Vercel
+let cachedExecutablePath: string | null = null;
+let downloadPromise: Promise<string> | null = null;
+
 function findLocalChrome(): string | null {
   const candidates =
     process.platform === "darwin"
@@ -15,11 +19,7 @@ function findLocalChrome(): string | null {
             "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
             "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe",
           ]
-        : [
-            "/usr/bin/google-chrome",
-            "/usr/bin/chromium-browser",
-            "/usr/bin/chromium",
-          ];
+        : [];
 
   for (const p of candidates) {
     try {
@@ -31,15 +31,48 @@ function findLocalChrome(): string | null {
   return null;
 }
 
+async function getChromiumPath(): Promise<string> {
+  if (cachedExecutablePath) return cachedExecutablePath;
+
+  if (!downloadPromise) {
+    const chromium = (await import("@sparticuz/chromium-min")).default;
+    const chromiumPackUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
+      ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}/chromium-pack.tar`
+      : `https://${process.env.VERCEL_URL}/chromium-pack.tar`;
+
+    downloadPromise = chromium
+      .executablePath(chromiumPackUrl)
+      .then((path: string) => {
+        cachedExecutablePath = path;
+        return path;
+      })
+      .catch((error: Error) => {
+        downloadPromise = null;
+        throw error;
+      });
+  }
+
+  return downloadPromise;
+}
+
 export async function getBrowser(): Promise<Browser> {
   if (browser && browser.connected) {
     return browser;
   }
 
-  const isDev = process.env.NODE_ENV !== "production";
+  const isVercel = !!process.env.VERCEL_ENV;
 
-  if (isDev) {
-    // In dev, prefer local Chrome/Chromium (sparticuz bundles a Linux binary)
+  if (isVercel) {
+    // Vercel: use chromium-min with hosted tar
+    const chromium = (await import("@sparticuz/chromium-min")).default;
+    const executablePath = await getChromiumPath();
+    browser = await puppeteer.launch({
+      args: chromium.args,
+      executablePath,
+      headless: true,
+    });
+  } else {
+    // Local dev: use system Chrome
     const localChrome = findLocalChrome();
     if (localChrome) {
       browser = await puppeteer.launch({
@@ -53,29 +86,15 @@ export async function getBrowser(): Promise<Browser> {
         ],
       });
     } else {
-      // Fallback to sparticuz (works on Linux dev machines)
-      const chromium = await import("@sparticuz/chromium");
-      browser = await puppeteer.launch({
-        args: chromium.default.args,
-        executablePath: await chromium.default.executablePath(),
-        headless: true,
-      });
+      throw new Error(
+        "No local Chrome found. Install Google Chrome or set VERCEL_ENV.",
+      );
     }
-  } else {
-    const chromiumMin = await import("@sparticuz/chromium-min");
-    const chromiumPackUrl =
-      process.env.CHROMIUM_PACK_URL ??
-      `file://${process.cwd()}/public/chromium-pack.tar`;
-    browser = await puppeteer.launch({
-      args: chromiumMin.default.args,
-      executablePath: await chromiumMin.default.executablePath(chromiumPackUrl),
-      headless: true,
-    });
   }
 
-  browser.on("disconnected", () => {
+  browser!.on("disconnected", () => {
     browser = null;
   });
 
-  return browser;
+  return browser!;
 }

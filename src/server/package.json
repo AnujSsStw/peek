@@ -11,14 +11,14 @@
     "postinstall": "node scripts/postinstall.mjs"
   },
   "dependencies": {
-    "@sparticuz/chromium-min": "^143.0.4",
+    "@sparticuz/chromium-min": "^141.0.0",
     "next": "16.1.6",
-    "puppeteer-core": "^24.39.0",
+    "puppeteer-core": "^23.11.0",
     "react": "19.2.3",
     "react-dom": "19.2.3"
   },
   "devDependencies": {
-    "@sparticuz/chromium": "^143.0.4",
+    "@sparticuz/chromium": "^141.0.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
