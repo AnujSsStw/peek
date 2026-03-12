@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
-import type { LayoutType, ScreenshotRequestBody } from "./types";
-import { getMockData } from "./templates/mock-data";
-import { renderScreenshot } from "./render-screenshot";
+import type { LayoutType } from "../screenshot/types";
+import { renderScreenshot } from "../screenshot/render-screenshot";
+import { getMockCalendarData } from "./calendar";
+import { getWeather } from "./weather";
+import { generateWidgetData } from "./ai";
 
 const VALID_LAYOUTS: Set<string> = new Set<string>([
   "contextual-hero",
@@ -16,14 +18,21 @@ const VALID_LAYOUTS: Set<string> = new Set<string>([
 ]);
 
 export async function POST(request: Request) {
-  let body: ScreenshotRequestBody;
+  let body: {
+    width?: number;
+    height?: number;
+    layout?: string;
+    date?: string; // e.g. "Thursday, March 13"
+    currentTime?: string; // e.g. "13:42" or "1:42 PM"
+    location?: string; //TODO: will be db call
+  };
   try {
     body = await request.json();
   } catch {
     return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
   }
 
-  const { width, height, layout, variant, data, useMockData } = body;
+  const { width, height, layout, date, currentTime, location } = body;
 
   // Validate dimensions
   if (
@@ -50,30 +59,39 @@ export async function POST(request: Request) {
     );
   }
 
-  // Validate variant
-  if (!variant || typeof variant !== "string") {
-    return NextResponse.json({ error: "variant is required" }, { status: 400 });
-  }
-
-  // Resolve data
-  const widgetData = useMockData
-    ? getMockData(layout as LayoutType, variant)
-    : data;
-  if (!widgetData) {
+  // Validate client-provided date and time
+  if (!date || typeof date !== "string") {
     return NextResponse.json(
-      { error: "data is required when useMockData is not true." },
+      { error: "date is required (e.g. 'Thursday, March 13')" },
+      { status: 400 },
+    );
+  }
+  if (!currentTime || typeof currentTime !== "string") {
+    return NextResponse.json(
+      { error: "currentTime is required (e.g. '13:42')" },
       { status: 400 },
     );
   }
 
   try {
+    const [calendar, weather] = await Promise.all([
+      Promise.resolve(getMockCalendarData()),
+      getWeather(location || "auto:ip"),
+    ]);
+
+    const { variant, data } = await generateWidgetData(layout as LayoutType, {
+      calendar,
+      weather,
+      date,
+      currentTime,
+    });
+
     const buf = await renderScreenshot({
       width,
       height,
       layout: layout as LayoutType,
       variant,
-      data: widgetData,
-      scale: body.scale,
+      data: data as any,
     });
 
     // @ts-ignore
@@ -86,7 +104,7 @@ export async function POST(request: Request) {
     });
   } catch (err) {
     const message =
-      err instanceof Error ? err.message : "Unknown rendering error";
+      err instanceof Error ? err.message : "Unknown generation error";
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }

@@ -11,11 +11,15 @@
     "postinstall": "node scripts/postinstall.mjs"
   },
   "dependencies": {
+    "@ai-sdk/openai": "^3.0.41",
+    "@ai-sdk/react": "^3.0.118",
     "@sparticuz/chromium-min": "^141.0.0",
+    "ai": "^6.0.116",
     "next": "16.1.6",
     "puppeteer-core": "^23.11.0",
     "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "react-dom": "19.2.3",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@sparticuz/chromium": "^141.0.0",
