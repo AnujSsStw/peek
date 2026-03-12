@@ -77,16 +77,18 @@ export async function POST(request: Request) {
     const html = renderWidget(layout as LayoutType, renderVariant, widgetData);
     const browser = await getBrowser();
     page = await browser.newPage();
+    const scale = body.scale ?? 10;
     await page.setViewport({
       width,
       height,
-      deviceScaleFactor: 2,
+      deviceScaleFactor: scale,
     });
     await page.setContent(html, { waitUntil: "networkidle0" });
 
     const screenshot = await page.screenshot({
       type: "png",
       clip: { x: 0, y: 0, width, height },
+      omitBackground: true,
     });
 
     return new Response(Buffer.from(screenshot), {

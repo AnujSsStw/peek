@@ -131,4 +131,6 @@ export interface ScreenshotRequestBody {
   variant: string;
   data?: WidgetData;
   useMockData?: boolean;
+  /** Device scale factor (default 3). Higher = crisper. Max 4. */
+  scale?: number;
 }
