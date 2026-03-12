@@ -631,11 +631,11 @@ const progressRing: Record<string, ProgressRingData> = {
 const companionQuote: Record<string, CompanionQuoteData> = {
   warm: {
     text: "You don't have to finish everything — just keep the thread going.",
-    from: "Inku · Your afternoon nudge",
+    from: "Peek · Your afternoon nudge",
   },
   frost: {
     text: "The hardest part was starting. You already did that today.",
-    from: "Inku · Evening reflection",
+    from: "Peek · Evening reflection",
   },
 };
 
