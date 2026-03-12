@@ -39,27 +39,11 @@ export default function WelcomeScreen() {
 
       <View style={styles.buttons}>
         <Pressable
-          style={[
-            styles.googleBtn,
-            { backgroundColor: c.surface, borderColor: c.border },
-          ]}
-          onPress={() => router.push("/onboarding/connect")}
-        >
-          <View style={styles.gLogo}>
-            <Text style={styles.gText}>{"G"}</Text>
-          </View>
-          <Text style={[styles.googleBtnText, { color: c.t1 }]}>
-            Continue with Google
-          </Text>
-        </Pressable>
-        {/* <Pressable
-          style={styles.btnGhost}
+          style={[styles.btnPrimary, { backgroundColor: c.t1 }]}
           onPress={() => router.push("/onboarding/login")}
         >
-          <Text style={[styles.btnGhostText, { color: c.t3 }]}>
-            I have an account
-          </Text>
-        </Pressable> */}
+          <Text style={styles.btnPrimaryText}>Get Started</Text>
+        </Pressable>
       </View>
     </View>
   );

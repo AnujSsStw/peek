@@ -1,14 +1,31 @@
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { Stack } from 'expo-router';
-import React from 'react';
+import { Stack, useRouter, useSegments } from 'expo-router';
+import React, { useEffect } from 'react';
 import { useColorScheme } from 'react-native';
 
 import { AppColors } from '@/constants/colors';
+import { authClient } from '@/utils/auth';
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   const isDark = colorScheme === 'dark';
   const colors = isDark ? AppColors.dark : AppColors.light;
+
+  const { data: session, isPending } = authClient.useSession();
+  const segments = useSegments();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (isPending) return;
+
+    const inAuthGroup = segments[0] === 'onboarding';
+
+    if (!session && !inAuthGroup) {
+      router.replace('/onboarding/welcome');
+    } else if (session && inAuthGroup) {
+      router.replace('/(tabs)');
+    }
+  }, [session, isPending, segments]);
 
   return (
     <ThemeProvider value={isDark ? DarkTheme : DefaultTheme}>
