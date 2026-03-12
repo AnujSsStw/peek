@@ -147,6 +147,9 @@ export function initAuth<
         },
       },
     },
+    account: {
+      skipStateCookieCheck: true,
+    },
   } satisfies BetterAuthOptions;
 
   return betterAuth(config);

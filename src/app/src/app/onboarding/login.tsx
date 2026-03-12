@@ -50,6 +50,7 @@ export default function LoginScreen() {
       router.replace("/(tabs)");
     } catch (e) {
       setError("Sign in failed. Please try again.");
+      console.error("Google sign-in error:", e);
     } finally {
       setLoading(false);
     }
