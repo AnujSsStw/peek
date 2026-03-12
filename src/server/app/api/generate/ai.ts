@@ -104,7 +104,7 @@ ${calendar.tasks.map((t) => `- [${t.done ? "x" : " "}] ${t.title} (${t.priority}
 Weather: ${weather.icon} ${weather.temp_c}°C ${weather.condition}`;
 
   const { object } = await generateObject({
-    model: openai("gpt-4o-mini"),
+    model: openai("gpt-5-mini-2025-08-07"),
     schema,
     system: systemPrompt,
     prompt: userPrompt,

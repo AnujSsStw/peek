@@ -78,9 +78,9 @@ const timelineEventSchema = z.object({
     ),
   status: z
     .enum(["past", "active"])
-    .optional()
+    .nullable()
     .describe(
-      "Set 'past' for completed events, 'active' for current one. Omit for future.",
+      "Set 'past' for completed events, 'active' for current one. null for future.",
     ),
 });
 
@@ -112,15 +112,18 @@ const timelineTaskEventSchema = z.object({
   time: z.string().describe("HH:MM for events, empty string for inline tasks"),
   title: z.string().describe("Event or task name. Max 25 chars."),
   meta: z.string().describe("Status/duration. Max 20 chars."),
-  status: z.enum(["past", "active"]).optional(),
+  status: z
+    .enum(["past", "active"])
+    .nullable()
+    .describe("'past' for completed, 'active' for current, null for future"),
   type: z
     .enum(["event", "task"])
-    .optional()
-    .describe("'task' for inline task items, 'event' for calendar events"),
+    .nullable()
+    .describe("'task' for inline task items, 'event' for calendar events, null if obvious"),
   subtasks: z
     .array(subTaskSchema)
-    .optional()
-    .describe("Only used with nested subVariant"),
+    .nullable()
+    .describe("Only used with nested subVariant, null otherwise"),
 });
 
 const taskItemSchema = z.object({
@@ -163,8 +166,8 @@ const timelineTasksSchema = z.object({
         count: z.string().describe("e.g. '3 / 5'. Max 10 chars."),
         tasks: z.array(taskItemSchema).min(2).max(5),
       })
-      .optional()
-      .describe("Only for pinned subVariant"),
+      .nullable()
+      .describe("Only for pinned subVariant, null otherwise"),
     floatingTask: z
       .object({
         icon: z.string().describe("Arrow or emoji, e.g. '→'"),
@@ -172,16 +175,16 @@ const timelineTasksSchema = z.object({
         title: z.string().describe("Task name. Max 25 chars."),
         sub: z.string().describe("Priority + context. Max 35 chars."),
       })
-      .optional()
-      .describe("Only for floating subVariant"),
+      .nullable()
+      .describe("Only for floating subVariant, null otherwise"),
     progressHeader: z
       .object({
         greeting: z.string().describe("Day name or greeting. Max 15 chars."),
         fraction: z.string().describe("e.g. '3 of 7 tasks'. Max 15 chars."),
         percent: z.number().min(0).max(100),
       })
-      .optional()
-      .describe("Only for progress subVariant"),
+      .nullable()
+      .describe("Only for progress subVariant, null otherwise"),
   }),
 });
 
