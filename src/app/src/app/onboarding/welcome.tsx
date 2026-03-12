@@ -1,0 +1,116 @@
+import { useRouter } from "expo-router";
+import React from "react";
+import { Pressable, StyleSheet, Text, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+import { useAppTheme } from "@/hooks/use-app-theme";
+
+export default function WelcomeScreen() {
+  const insets = useSafeAreaInsets();
+  const router = useRouter();
+  const c = useAppTheme();
+
+  return (
+    <View
+      style={[
+        styles.container,
+        {
+          backgroundColor: c.bg,
+          paddingTop: insets.top,
+          paddingBottom: insets.bottom + 20,
+        },
+      ]}
+    >
+      <View style={styles.hero}>
+        <Text style={styles.icon}>{"📅"}</Text>
+        <Text style={[styles.title, { color: c.t1 }]}>
+          {"Your day,\nat a glance"}
+        </Text>
+        <Text style={[styles.subtitle, { color: c.t2 }]}>
+          Connect your calendars and tasks. We'll put everything on your home
+          screen — no app needed.
+        </Text>
+      </View>
+
+      <View style={styles.dots}>
+        <View style={[styles.dot, { backgroundColor: c.t1 }]} />
+        <View style={[styles.dot, { backgroundColor: c.border }]} />
+      </View>
+
+      <View style={styles.buttons}>
+        <Pressable
+          style={[
+            styles.googleBtn,
+            { backgroundColor: c.surface, borderColor: c.border },
+          ]}
+          onPress={() => router.push("/onboarding/connect")}
+        >
+          <View style={styles.gLogo}>
+            <Text style={styles.gText}>{"G"}</Text>
+          </View>
+          <Text style={[styles.googleBtnText, { color: c.t1 }]}>
+            Continue with Google
+          </Text>
+        </Pressable>
+        {/* <Pressable
+          style={styles.btnGhost}
+          onPress={() => router.push("/onboarding/login")}
+        >
+          <Text style={[styles.btnGhostText, { color: c.t3 }]}>
+            I have an account
+          </Text>
+        </Pressable> */}
+      </View>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: { flex: 1, paddingHorizontal: 28 },
+  hero: { flex: 1, justifyContent: "center", alignItems: "center" },
+  icon: { fontSize: 56, marginBottom: 20 },
+  title: {
+    fontSize: 32,
+    fontWeight: "800",
+    textAlign: "center",
+    lineHeight: 38,
+    marginBottom: 12,
+  },
+  subtitle: {
+    fontSize: 15,
+    textAlign: "center",
+    lineHeight: 22,
+    maxWidth: 280,
+  },
+  dots: {
+    flexDirection: "row",
+    justifyContent: "center",
+    gap: 6,
+    marginBottom: 24,
+  },
+  dot: { width: 6, height: 6, borderRadius: 3 },
+  buttons: { gap: 10 },
+  btnPrimary: { paddingVertical: 16, borderRadius: 14, alignItems: "center" },
+  btnPrimaryText: { fontSize: 16, fontWeight: "700" },
+  btnGhost: { paddingVertical: 14, alignItems: "center" },
+  btnGhostText: { fontSize: 14, fontWeight: "500" },
+  googleBtn: {
+    flexDirection: "row" as const,
+    alignItems: "center" as const,
+    justifyContent: "center" as const,
+    gap: 10,
+    paddingVertical: 16,
+    borderRadius: 14,
+    borderWidth: 1,
+  },
+  googleBtnText: { fontSize: 16, fontWeight: "600" as const },
+  gLogo: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    backgroundColor: "#fff",
+    alignItems: "center" as const,
+    justifyContent: "center" as const,
+  },
+  gText: { fontSize: 13, fontWeight: "700" as const, color: "#4285F4" },
+});
