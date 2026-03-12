@@ -11,6 +11,7 @@ export const WIDGET_CSS = `
   --accent: #c4f24a;
   --accent-dim: rgba(196,242,74,0.1);
   --border: rgba(255,255,255,0.055);
+  --emoji: 'Noto Color Emoji', 'Apple Color Emoji', 'Segoe UI Emoji', sans-serif;
   --serif: 'DM Serif Display', Georgia, serif;
   --sans: 'Instrument Sans', system-ui, sans-serif;
   --mono: 'JetBrains Mono', monospace;
@@ -36,7 +37,7 @@ body {
   display:flex; flex-direction:column; align-items:center; justify-content:center;
   padding:16px; position:relative; overflow:hidden;
 }
-.w1 .icon { font-size:26px; margin-bottom:4px; filter:drop-shadow(0 2px 5px rgba(0,0,0,.12)); }
+.w1 .icon { font-size:26px; margin-bottom:4px; filter:drop-shadow(0 2px 5px rgba(0,0,0,.12)); font-family:var(--emoji); }
 .w1 .val { font-family:var(--sans); font-size:32px; font-weight:800; line-height:1; }
 .w1 .sub { font-size:13px; font-weight:500; margin-top:2px; }
 
@@ -126,6 +127,7 @@ body {
 .w2 .cell-icon {
   width:26px; height:26px; border-radius:8px;
   display:flex; align-items:center; justify-content:center; font-size:13px;
+  font-family:var(--emoji);
 }
 .w2 .cell-head {
   font-family:var(--mono); font-size:9px; font-weight:600;
@@ -470,7 +472,7 @@ body {
   display:flex; flex-direction:column; align-items:center; justify-content:center;
   padding:16px; position:relative; overflow:hidden;
 }
-.wc-streak .flame { font-size:40px; line-height:1; margin-bottom:2px; }
+.wc-streak .flame { font-size:40px; line-height:1; margin-bottom:2px; font-family:var(--emoji); }
 .wc-streak .streak-num { font-size:36px; font-weight:800; line-height:1; }
 .wc-streak .streak-lab { font-size:11px; font-weight:600; letter-spacing:.12em; text-transform:uppercase; margin-top:2px; }
 
