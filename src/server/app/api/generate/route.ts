@@ -105,6 +105,7 @@ export async function POST(request: Request) {
   } catch (err) {
     const message =
       err instanceof Error ? err.message : "Unknown generation error";
+    console.error("Generation error:", err);
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }

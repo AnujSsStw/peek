@@ -1,4 +1,4 @@
-import { generateObject, generateText, Output } from "ai";
+import { generateObject } from "ai";
 import { createOpenAI } from "@ai-sdk/openai";
 import type { LayoutType } from "../screenshot/types";
 import type { CalendarData } from "./calendar";
@@ -103,16 +103,13 @@ ${calendar.tasks.map((t) => `- [${t.done ? "x" : " "}] ${t.title} (${t.priority}
 
 Weather: ${weather.icon} ${weather.temp_c}°C ${weather.condition}`;
 
-  const result = await generateText({
+  const { object } = await generateObject({
     model: openai("gpt-4o-mini"),
+    schema,
     system: systemPrompt,
     prompt: userPrompt,
-    output: Output.object({ schema }),
   });
 
-  const object = (result as any).object as {
-    variant: string;
-    data: Record<string, unknown>;
-  };
-  return { variant: object.variant, data: object.data };
+  const result = object as { variant: string; data: Record<string, unknown> };
+  return { variant: result.variant, data: result.data };
 }
