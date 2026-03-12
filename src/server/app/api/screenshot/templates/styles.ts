@@ -111,12 +111,12 @@ body {
 ═══════════════════════════════════════════════ */
 .w2 {
   width:360px; height:180px; border-radius:24px;
-  padding:10px; display:grid;
+  padding:6px; display:grid;
   grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; gap:8px;
   overflow:hidden;
 }
 .w2 .cell {
-  border-radius:14px; padding:12px 13px 10px;
+  border-radius:14px; padding:10px 11px;
   display:flex; flex-direction:column; justify-content:space-between;
   position:relative; overflow:hidden;
 }
@@ -133,7 +133,7 @@ body {
   font-family:var(--mono); font-size:9px; font-weight:600;
   letter-spacing:.1em; text-transform:uppercase; margin-top:3px;
 }
-.w2 .cell-val { font-size:16px; font-weight:700; line-height:1.2; margin-top:auto; padding-top:4px; }
+.w2 .cell-val { font-size:16px; font-weight:700; line-height:1.2; margin-top:auto; padding-top:4px; padding-bottom:2px; }
 
 .w2-frost {
   background: rgba(255,255,255,.03);
