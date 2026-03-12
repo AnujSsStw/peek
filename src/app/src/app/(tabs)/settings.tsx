@@ -13,6 +13,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { type AppTheme } from "@/constants/colors";
 import { useAppTheme } from "@/hooks/use-app-theme";
+import { authClient } from "@/utils/auth";
 
 function SectionHeader({ title, c }: { title: string; c: AppTheme }) {
   return <Text style={[styles.sectionHeader, { color: c.t3 }]}>{title}</Text>;
@@ -57,6 +58,7 @@ export default function SettingsScreen() {
   const router = useRouter();
   const c = useAppTheme();
   const colorScheme = useColorScheme();
+  const { data: session } = authClient.useSession();
 
   return (
     <ScrollView
@@ -67,6 +69,31 @@ export default function SettingsScreen() {
       ]}
     >
       <Text style={[styles.pageTitle, { color: c.t1 }]}>Settings</Text>
+
+      {session?.user && (
+        <View
+          style={[
+            styles.card,
+            { backgroundColor: c.surface, borderColor: c.border, marginBottom: 8 },
+          ]}
+        >
+          <View style={[styles.row, { borderBottomWidth: 0 }]}>
+            <View style={[styles.rowIcon, { backgroundColor: c.blueTint }]}>
+              <Text style={{ fontSize: 16 }}>
+                {session.user.name?.[0]?.toUpperCase() ?? "?"}
+              </Text>
+            </View>
+            <View style={styles.rowInfo}>
+              <Text style={[styles.rowName, { color: c.t1 }]}>
+                {session.user.name ?? "User"}
+              </Text>
+              <Text style={[styles.rowDesc, { color: c.t3 }]}>
+                {session.user.email}
+              </Text>
+            </View>
+          </View>
+        </View>
+      )}
 
       <SectionHeader title="Integrations" c={c} />
       <View
@@ -189,7 +216,10 @@ export default function SettingsScreen() {
 
       <Pressable
         style={styles.logoutBtn}
-        onPress={() => router.replace("/onboarding/welcome")}
+        onPress={async () => {
+          await authClient.signOut();
+          router.replace("/onboarding/welcome");
+        }}
       >
         <Text style={[styles.logoutText, { color: c.red }]}>Log Out</Text>
       </Pressable>

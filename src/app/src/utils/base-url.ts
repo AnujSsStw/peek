@@ -5,6 +5,12 @@ import Constants from "expo-constants";
  * setting the baseUrl to your production API URL.
  */
 export const getBaseUrl = () => {
+  const publicAuthBaseUrl = process.env.EXPO_PUBLIC_AUTH_BASE_URL?.trim();
+
+  if (publicAuthBaseUrl) {
+    return publicAuthBaseUrl.replace(/\/+$/, "");
+  }
+
   /**
    * Gets the IP address of your host-machine. If it cannot automatically find it,
    * you'll have to manually set it. NOTE: Port 3000 should work for most but confirm
@@ -18,6 +24,8 @@ export const getBaseUrl = () => {
 
   if (!localhost) {
     // return "https://turbo.t3.gg";
+    // return "http://192.168.29.157:3000";
+    return "https://peek-snowy.vercel.app";
     throw new Error(
       "Failed to get localhost. Please point to your production server.",
     );

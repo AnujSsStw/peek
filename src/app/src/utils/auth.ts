@@ -9,7 +9,7 @@ export const authClient = createAuthClient({
   plugins: [
     expoClient({
       scheme: "app",
-      storagePrefix: "expo",
+      storagePrefix: "app",
       storage: SecureStore,
     }),
   ],

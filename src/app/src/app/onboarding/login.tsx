@@ -1,9 +1,16 @@
 import { useRouter } from "expo-router";
-import React from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import React, { useState } from "react";
+import {
+  ActivityIndicator,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { useAppTheme } from "@/hooks/use-app-theme";
+import { authClient } from "@/utils/auth";
 
 function GoogleLogo() {
   return (
@@ -29,6 +36,24 @@ export default function LoginScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const c = useAppTheme();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleGoogleSignIn = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      await authClient.signIn.social({
+        provider: "google",
+        callbackURL: "/(tabs)",
+      });
+      router.replace("/(tabs)");
+    } catch (e) {
+      setError("Sign in failed. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <View
@@ -58,14 +83,23 @@ export default function LoginScreen() {
           style={[
             styles.googleBtn,
             { backgroundColor: c.surface, borderColor: c.border },
+            loading && { opacity: 0.6 },
           ]}
-          onPress={() => router.replace("/(tabs)" as const)}
+          onPress={handleGoogleSignIn}
+          disabled={loading}
         >
-          <GoogleLogo />
+          {loading ? (
+            <ActivityIndicator size="small" color={c.t1} />
+          ) : (
+            <GoogleLogo />
+          )}
           <Text style={[styles.googleBtnText, { color: c.t1 }]}>
-            Continue with Google
+            {loading ? "Signing in..." : "Continue with Google"}
           </Text>
         </Pressable>
+        {error && (
+          <Text style={[styles.errorText, { color: c.red }]}>{error}</Text>
+        )}
       </View>
 
       <Text style={[styles.terms, { color: c.t3 }]}>
@@ -127,5 +161,10 @@ const styles = StyleSheet.create({
     lineHeight: 16,
     marginTop: 20,
     paddingHorizontal: 12,
+  },
+  errorText: {
+    fontSize: 13,
+    textAlign: "center",
+    marginTop: 8,
   },
 });
