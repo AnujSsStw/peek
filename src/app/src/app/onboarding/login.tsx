@@ -43,10 +43,12 @@ export default function LoginScreen() {
     setLoading(true);
     setError(null);
     try {
-      await authClient.signIn.social({
+      const result = await authClient.signIn.social({
         provider: "google",
         callbackURL: "/(tabs)",
       });
+      console.log("resutl", result);
+
       router.replace("/(tabs)");
     } catch (e) {
       setError("Sign in failed. Please try again.");
