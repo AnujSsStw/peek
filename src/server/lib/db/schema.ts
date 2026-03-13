@@ -1,4 +1,12 @@
-import { boolean, pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import {
+  boolean,
+  index,
+  jsonb,
+  pgTable,
+  text,
+  timestamp,
+  uniqueIndex,
+} from "drizzle-orm/pg-core";
 
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
@@ -49,3 +57,44 @@ export const verification = pgTable("verification", {
   createdAt: timestamp("created_at"),
   updatedAt: timestamp("updated_at"),
 });
+
+export const integrationSource = pgTable(
+  "integration_source",
+  {
+    id: text("id").primaryKey(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    provider: text("provider").notNull(),
+    kind: text("kind").notNull(),
+    externalId: text("external_id").notNull(),
+    name: text("name").notNull(),
+    description: text("description"),
+    color: text("color"),
+    enabled: boolean("enabled").notNull().default(true),
+    isAvailable: boolean("is_available").notNull().default(true),
+    metadata: jsonb("metadata").$type<Record<string, unknown> | null>(),
+    lastSyncedAt: timestamp("last_synced_at"),
+    createdAt: timestamp("created_at").notNull(),
+    updatedAt: timestamp("updated_at").notNull(),
+  },
+  (table) => [
+    uniqueIndex("integration_source_user_provider_kind_external_id_idx").on(
+      table.userId,
+      table.provider,
+      table.kind,
+      table.externalId,
+    ),
+    index("integration_source_user_provider_kind_idx").on(
+      table.userId,
+      table.provider,
+      table.kind,
+    ),
+  ],
+);
+
+export type User = typeof user.$inferSelect;
+export type Session = typeof session.$inferSelect;
+export type Account = typeof account.$inferSelect;
+export type Verification = typeof verification.$inferSelect;
+export type IntegrationSource = typeof integrationSource.$inferSelect;
