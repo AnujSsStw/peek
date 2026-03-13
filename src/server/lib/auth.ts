@@ -121,7 +121,7 @@ export function initAuth<
       google: {
         clientId: options.googleClientId,
         clientSecret: options.googleClientSecret,
-        redirectURI: `${options.productionUrl}/api/auth/callback/google`,
+        redirectURI: `${options.baseUrl}/api/auth/callback/google`,
       },
     },
     trustedOrigins: [
@@ -151,9 +151,9 @@ export function initAuth<
         secure: true,
       },
     },
-    // account: {
-    //   skipStateCookieCheck: true,
-    // },
+    account: {
+      skipStateCookieCheck: true,
+    },
   } satisfies BetterAuthOptions;
 
   return betterAuth(config);
