@@ -2,6 +2,7 @@ import { useRouter } from "expo-router";
 import React from "react";
 import {
   Appearance,
+  Image,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -15,7 +16,7 @@ import { type AppTheme } from "@/constants/colors";
 import { useAppTheme } from "@/hooks/use-app-theme";
 import { authClient } from "@/utils/auth";
 
-function SectionHeader({ title, c }: { title: string; c: AppTheme }) {
+function SectionHeader({ title, c }: { title: string; c: any }) {
   return <Text style={[styles.sectionHeader, { color: c.t3 }]}>{title}</Text>;
 }
 
@@ -32,7 +33,7 @@ function SettingsRow({
   name: string;
   desc?: string;
   onPress?: () => void;
-  c: AppTheme;
+  c: any;
 }) {
   return (
     <Pressable
@@ -74,14 +75,34 @@ export default function SettingsScreen() {
         <View
           style={[
             styles.card,
-            { backgroundColor: c.surface, borderColor: c.border, marginBottom: 8 },
+            {
+              backgroundColor: c.surface,
+              borderColor: c.border,
+              marginBottom: 8,
+            },
           ]}
         >
           <View style={[styles.row, { borderBottomWidth: 0 }]}>
             <View style={[styles.rowIcon, { backgroundColor: c.blueTint }]}>
-              <Text style={{ fontSize: 16 }}>
-                {session.user.name?.[0]?.toUpperCase() ?? "?"}
-              </Text>
+              {session.user.image ? (
+                <View
+                  style={{
+                    width: 36,
+                    height: 36,
+                    borderRadius: 4,
+                    overflow: "hidden",
+                  }}
+                >
+                  <Image
+                    source={{ uri: session.user.image }}
+                    style={{ width: "100%", height: "100%" }}
+                  />
+                </View>
+              ) : (
+                <Text style={{ fontSize: 16 }}>
+                  {session.user.name?.[0]?.toUpperCase() ?? "?"}
+                </Text>
+              )}
             </View>
             <View style={styles.rowInfo}>
               <Text style={[styles.rowName, { color: c.t1 }]}>
@@ -197,10 +218,14 @@ export default function SettingsScreen() {
           <Pressable
             style={[
               styles.toggle,
-              { backgroundColor: colorScheme === "dark" ? c.green : c.toggleOff },
+              {
+                backgroundColor: colorScheme === "dark" ? c.green : c.toggleOff,
+              },
             ]}
             onPress={() => {
-              Appearance.setColorScheme(colorScheme === "dark" ? "light" : "dark");
+              Appearance.setColorScheme(
+                colorScheme === "dark" ? "light" : "dark",
+              );
             }}
           >
             <View
