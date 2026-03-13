@@ -40,24 +40,18 @@ export default function IntegrationDetailScreen() {
   const trpc = useTRPC();
   const queryClient = useQueryClient();
 
-  const { data: detail, isLoading } = useQuery(
-    trpc.integrations.detail.queryOptions({ provider: provider ?? "" }),
+  const { data: rawDetail, isLoading } = useQuery(
+    trpc.integrations.detail.queryOptions({ provider: provider ?? "" }, {}),
   );
 
-  const toggleMutation = useMutation(
-    trpc.integrations.toggleSource.mutationOptions({
-      onSuccess: () => {
-        queryClient.invalidateQueries({
-          queryKey: trpc.integrations.detail.queryKey({
-            provider: provider ?? "",
-          }),
-        });
-        queryClient.invalidateQueries({
-          queryKey: trpc.integrations.list.queryKey(),
-        });
-      },
-    }),
-  );
+  const detail = rawDetail
+    ? {
+        ...rawDetail,
+        sources: [...rawDetail.sources].sort((a, b) =>
+          a.name.localeCompare(b.name),
+        ),
+      }
+    : rawDetail;
 
   const disconnectMutation = useMutation(
     trpc.integrations.disconnect.mutationOptions({
@@ -201,42 +195,14 @@ export default function IntegrationDetailScreen() {
                 },
                 idx: number,
               ) => (
-                <View
+                <ListItem
                   key={source.id}
-                  style={[
-                    styles.sourceRow,
-                    { borderBottomColor: c.border },
-                    idx === availableSources.length - 1 && {
-                      borderBottomWidth: 0,
-                    },
-                  ]}
-                >
-                  <View style={styles.sourceInfo}>
-                    <View
-                      style={[
-                        styles.sourceDot,
-                        { backgroundColor: source.color ?? c.t3 },
-                      ]}
-                    />
-                    <Text
-                      style={[styles.sourceName, { color: c.t1 }]}
-                      numberOfLines={1}
-                    >
-                      {source.name}
-                    </Text>
-                  </View>
-                  <Toggle
-                    on={source.enabled}
-                    disabled={toggleMutation.isPending}
-                    onToggle={() =>
-                      toggleMutation.mutate({
-                        sourceId: source.id,
-                        enabled: !source.enabled,
-                      })
-                    }
-                    c={c}
-                  />
-                </View>
+                  source={source}
+                  c={c}
+                  idx={idx}
+                  availableSources={availableSources}
+                  provider={provider}
+                />
               ),
             )}
           </View>
@@ -318,6 +284,94 @@ export default function IntegrationDetailScreen() {
   );
 }
 
+function ListItem({
+  source,
+  c,
+  idx,
+  availableSources,
+  provider,
+}: {
+  source: {
+    id: string;
+    name: string;
+    color: string | null;
+    enabled: boolean;
+    isAvailable: boolean;
+  };
+  c: any;
+  idx: number;
+  availableSources: any[];
+  provider?: string;
+}) {
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+  const detailQueryKey = trpc.integrations.detail.queryKey({
+    provider: provider ?? "",
+  });
+
+  const toggleMutation = useMutation(
+    trpc.integrations.toggleSource.mutationOptions({
+      onMutate: async (variables) => {
+        await queryClient.cancelQueries({ queryKey: detailQueryKey });
+        const previous = queryClient.getQueryData(detailQueryKey);
+        queryClient.setQueryData(detailQueryKey, (old) => {
+          if (!old) return old;
+          return {
+            ...old,
+            sources: old.sources.map((s: any) =>
+              s.id === variables.sourceId
+                ? { ...s, enabled: variables.enabled }
+                : s,
+            ),
+          };
+        });
+        return { previous };
+      },
+      onError: (_err, _variables, context) => {
+        if (context?.previous) {
+          queryClient.setQueryData(detailQueryKey, context.previous);
+        }
+      },
+      onSettled: () => {
+        queryClient.invalidateQueries({ queryKey: detailQueryKey });
+        queryClient.invalidateQueries({
+          queryKey: trpc.integrations.list.queryKey(),
+        });
+      },
+    }),
+  );
+  return (
+    <View
+      key={source.id}
+      style={[
+        styles.sourceRow,
+        { borderBottomColor: c.border },
+        idx === availableSources.length - 1 && {
+          borderBottomWidth: 0,
+        },
+      ]}
+    >
+      <View style={styles.sourceInfo}>
+        <View
+          style={[styles.sourceDot, { backgroundColor: source.color ?? c.t3 }]}
+        />
+        <Text style={[styles.sourceName, { color: c.t1 }]} numberOfLines={1}>
+          {source.name}
+        </Text>
+      </View>
+      <Toggle
+        on={source.enabled}
+        onToggle={() =>
+          toggleMutation.mutate({
+            sourceId: source.id,
+            enabled: !source.enabled,
+          })
+        }
+        c={c}
+      />
+    </View>
+  );
+}
 const styles = StyleSheet.create({
   container: { flex: 1 },
   centered: { alignItems: "center", justifyContent: "center" },
