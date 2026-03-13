@@ -3,7 +3,7 @@ import { z } from "zod";
 
 import { db } from "@/lib/db";
 import { account, integrationSource } from "@/lib/db/schema";
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 const SUPPORTED_PROVIDERS = [
   {
@@ -25,7 +25,20 @@ const SUPPORTED_PROVIDERS = [
 ] as const;
 
 export const integrationsRouter = createTRPCRouter({
-  list: protectedProcedure.query(async ({ ctx }) => {
+  list: publicProcedure.query(async ({ ctx }) => {
+    if (!ctx.session) {
+      return SUPPORTED_PROVIDERS.map((provider) => ({
+        id: provider.id,
+        name: provider.name,
+        icon: provider.icon,
+        iconBg: provider.iconBg,
+        section: provider.section,
+        connected: false,
+        accountId: null,
+        isLoginAccount: false,
+        sources: [],
+      }));
+    }
     const userId = ctx.session.user.id;
 
     const [accounts, sources] = await Promise.all([

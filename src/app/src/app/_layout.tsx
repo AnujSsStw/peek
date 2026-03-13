@@ -66,7 +66,6 @@ export default function RootLayout() {
             options={{ animation: "fade" }}
           />
           <Stack.Screen name="onboarding/connect" />
-          <Stack.Screen name="onboarding/login" />
           <Stack.Screen
             name="widget/pick"
             options={{ presentation: "modal", animation: "slide_from_bottom" }}

@@ -1,14 +1,38 @@
 import { useRouter } from "expo-router";
-import React from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import React, { useState } from "react";
+import {
+  ActivityIndicator,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { useAppTheme } from "@/hooks/use-app-theme";
+import { authClient } from "@/utils/auth";
 
 export default function WelcomeScreen() {
   const insets = useSafeAreaInsets();
-  const router = useRouter();
   const c = useAppTheme();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleGoogleSignIn = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      await authClient.signIn.social({
+        provider: "google",
+        callbackURL: "/(tabs)",
+      });
+    } catch (e) {
+      setError("Sign in failed. Please try again.");
+      console.error("Google sign-in error:", e);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <View
@@ -32,22 +56,60 @@ export default function WelcomeScreen() {
         </Text>
       </View>
 
-      <View style={styles.dots}>
+      {/* <View style={styles.dots}>
         <View style={[styles.dot, { backgroundColor: c.t1 }]} />
         <View style={[styles.dot, { backgroundColor: c.border }]} />
-      </View>
+      </View> */}
 
       <View style={styles.buttons}>
         <Pressable
-          style={[styles.btnPrimary, { backgroundColor: c.t1 }]}
-          onPress={() => router.push("/onboarding/login")}
+          style={[
+            styles.googleBtn,
+            { backgroundColor: c.surface, borderColor: c.border },
+            loading && { opacity: 0.6 },
+          ]}
+          onPress={handleGoogleSignIn}
+          disabled={loading}
         >
-          <Text style={styles.btnPrimaryText}>Get Started</Text>
+          {loading ? (
+            <ActivityIndicator size="small" color={c.t1} />
+          ) : (
+            <GoogleLogo />
+          )}
+          <Text style={[styles.googleBtnText, { color: c.t1 }]}>
+            {loading ? "Signing in..." : "Continue with Google"}
+          </Text>
         </Pressable>
+        {error && (
+          <Text style={[styles.errorText, { color: c.red }]}>{error}</Text>
+        )}
       </View>
+
+      <Text style={[styles.terms, { color: c.t3 }]}>
+        By continuing, you agree to our Terms of Service and Privacy Policy.
+      </Text>
     </View>
   );
 }
+
+function GoogleLogo() {
+  return (
+    <View style={gStyles.logoWrap}>
+      <Text style={gStyles.g}>{"G"}</Text>
+    </View>
+  );
+}
+const gStyles = StyleSheet.create({
+  logoWrap: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  g: { fontSize: 13, fontWeight: "700", color: "#4285F4" },
+});
 
 const styles = StyleSheet.create({
   container: { flex: 1, paddingHorizontal: 28 },
@@ -78,15 +140,6 @@ const styles = StyleSheet.create({
   btnPrimaryText: { fontSize: 16, fontWeight: "700" },
   btnGhost: { paddingVertical: 14, alignItems: "center" },
   btnGhostText: { fontSize: 14, fontWeight: "500" },
-  googleBtn: {
-    flexDirection: "row" as const,
-    alignItems: "center" as const,
-    justifyContent: "center" as const,
-    gap: 10,
-    paddingVertical: 16,
-    borderRadius: 14,
-    borderWidth: 1,
-  },
   googleBtnText: { fontSize: 16, fontWeight: "600" as const },
   gLogo: {
     width: 20,
@@ -97,4 +150,42 @@ const styles = StyleSheet.create({
     justifyContent: "center" as const,
   },
   gText: { fontSize: 13, fontWeight: "700" as const, color: "#4285F4" },
+  googleBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 10,
+    paddingVertical: 16,
+    borderRadius: 14,
+    borderWidth: 1,
+  },
+  dividerRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+    paddingVertical: 4,
+  },
+  dividerLine: { flex: 1, height: StyleSheet.hairlineWidth },
+  dividerText: { fontSize: 13 },
+  appleBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+    paddingVertical: 16,
+    borderRadius: 14,
+  },
+  appleBtnText: { fontSize: 16, fontWeight: "600" },
+  terms: {
+    fontSize: 11,
+    textAlign: "center",
+    lineHeight: 16,
+    marginTop: 20,
+    paddingHorizontal: 12,
+  },
+  errorText: {
+    fontSize: 13,
+    textAlign: "center",
+    marginTop: 8,
+  },
 });

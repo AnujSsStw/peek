@@ -36,8 +36,9 @@ export default function ConnectScreen() {
   const c = useAppTheme();
   const trpc = useTRPC();
   const queryClient = useQueryClient();
-
-  const { data: integrations } = useQuery(trpc.integrations.list.queryOptions());
+  const { data: integrations } = useQuery(
+    trpc.integrations.list.queryOptions(),
+  );
 
   const [pendingIntegrationId, setPendingIntegrationId] = useState<
     string | null
@@ -111,7 +112,11 @@ export default function ConnectScreen() {
         const busy = pendingIntegrationId === item.id;
         const disabled = busy || connected || !item.supported;
         const colorValue =
-          item.id === "google" ? c.google : item.id === "todoist" ? c.todoist : c.local;
+          item.id === "google"
+            ? c.google
+            : item.id === "todoist"
+              ? c.todoist
+              : c.local;
 
         return (
           <View key={item.id}>
