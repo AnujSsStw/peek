@@ -4,53 +4,83 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { useAppTheme } from "@/hooks/use-app-theme";
+import { authClient } from "@/utils/auth";
+import { useTRPC } from "@/utils/trpc";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
-type IntegrationStatus = "idle" | "connected";
+const GOOGLE_CALENDAR_SCOPES = [
+  "https://www.googleapis.com/auth/calendar.readonly",
+  "https://www.googleapis.com/auth/calendar.calendarlist.readonly",
+] as const;
+
+const INTEGRATIONS = [
+  {
+    id: "google",
+    name: "Google Calendar",
+    desc: "Gmail, Google Workspace",
+    section: "Calendars",
+    supported: true,
+  },
+  {
+    id: "todoist",
+    name: "Todoist",
+    desc: "Tasks, projects, due dates",
+    section: "Tasks",
+    supported: true,
+  },
+] as const;
 
 export default function ConnectScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const c = useAppTheme();
-  const [statuses, setStatuses] = useState<Record<string, IntegrationStatus>>({
-    google: "connected",
-  });
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
 
-  const integrations = [
-    {
-      id: "google",
-      name: "Google Calendar",
-      desc: "Gmail, Google Workspace",
-      color: c.google,
-      section: "Calendars",
-    },
-    {
-      id: "outlook",
-      name: "Outlook",
-      desc: "Microsoft 365, Exchange",
-      color: c.outlook,
-      section: "Calendars",
-    },
-    {
-      id: "device",
-      name: "Device Calendar",
-      desc: "Apple Calendar, local events",
-      color: c.local,
-      section: "Calendars",
-    },
-    {
-      id: "todoist",
-      name: "Todoist",
-      desc: "Tasks, projects, due dates",
-      color: c.todoist,
-      section: "Tasks",
-    },
-  ];
+  const { data: integrations } = useQuery(trpc.integrations.list.queryOptions());
 
-  const toggleConnect = (id: string) => {
-    setStatuses((prev) => ({
-      ...prev,
-      [id]: prev[id] === "connected" ? "idle" : "connected",
-    }));
+  const [pendingIntegrationId, setPendingIntegrationId] = useState<
+    string | null
+  >(null);
+  const [error, setError] = useState<string | null>(null);
+
+  const isConnected = (id: string) =>
+    integrations?.find((i: { id: string }) => i.id === id)?.connected ?? false;
+
+  const handleConnect = async (integrationId: string) => {
+    if (isConnected(integrationId)) return;
+
+    setPendingIntegrationId(integrationId);
+    setError(null);
+
+    try {
+      if (integrationId === "google") {
+        await authClient.linkSocial({
+          provider: "google",
+          callbackURL: "/connect",
+          scopes: [...GOOGLE_CALENDAR_SCOPES],
+        });
+      } else if (integrationId === "todoist") {
+        await authClient.linkSocial({
+          provider: "todoist",
+          scopes: ["data:read"],
+          callbackURL: "/connect",
+        });
+      }
+
+      await queryClient.invalidateQueries({
+        queryKey: trpc.integrations.list.queryKey(),
+      });
+    } catch (connectError) {
+      console.error(`${integrationId} connect error`, connectError);
+      setError(
+        integrationId === "todoist"
+          ? "Todoist connection failed. Check the provider config and try again."
+          : "Google Calendar connection failed. Please try again.",
+      );
+    } finally {
+      setPendingIntegrationId(null);
+    }
   };
 
   let lastSection = "";
@@ -69,19 +99,27 @@ export default function ConnectScreen() {
       <Text style={[styles.pageSub, { color: c.t3 }]}>
         We pull events and tasks in. You see them on your widget. That's it.
       </Text>
+      {error ? (
+        <Text style={[styles.errorText, { color: c.red }]}>{error}</Text>
+      ) : null}
 
-      {integrations.map((item) => {
+      {INTEGRATIONS.map((item) => {
         const showSection = item.section !== lastSection;
         lastSection = item.section;
-        const connected = statuses[item.id] === "connected";
+
+        const connected = isConnected(item.id);
+        const busy = pendingIntegrationId === item.id;
+        const disabled = busy || connected || !item.supported;
+        const colorValue =
+          item.id === "google" ? c.google : item.id === "todoist" ? c.todoist : c.local;
 
         return (
           <View key={item.id}>
-            {showSection && (
+            {showSection ? (
               <Text style={[styles.sectionHeader, { color: c.t3 }]}>
                 {item.section}
               </Text>
-            )}
+            ) : null}
             <View
               style={[
                 styles.integrationRow,
@@ -91,10 +129,12 @@ export default function ConnectScreen() {
               <View
                 style={[
                   styles.integrationIcon,
-                  { backgroundColor: item.color + "18" },
+                  { backgroundColor: `${colorValue}18` },
                 ]}
               >
-                <Text style={{ fontSize: 18 }}>{"📅"}</Text>
+                <Text style={{ fontSize: 18 }}>
+                  {item.id === "todoist" ? "✓" : "📅"}
+                </Text>
               </View>
               <View style={styles.integrationInfo}>
                 <Text style={[styles.integrationName, { color: c.t1 }]}>
@@ -107,17 +147,33 @@ export default function ConnectScreen() {
               <Pressable
                 style={[
                   styles.connectBtn,
-                  { backgroundColor: connected ? c.statusGreenBg : c.t1 },
+                  connected
+                    ? { backgroundColor: c.statusGreenBg }
+                    : !item.supported
+                      ? { backgroundColor: c.surface, borderColor: c.border }
+                      : { backgroundColor: c.t1 },
+                  disabled && !connected && { opacity: 0.65 },
                 ]}
-                onPress={() => toggleConnect(item.id)}
+                disabled={disabled}
+                onPress={() => handleConnect(item.id)}
               >
                 <Text
                   style={[
                     styles.connectBtnText,
-                    connected && { color: c.green },
+                    connected
+                      ? { color: c.green }
+                      : !item.supported
+                        ? { color: c.t3 }
+                        : undefined,
                   ]}
                 >
-                  {connected ? "✓ Connected" : "Connect"}
+                  {busy
+                    ? "Connecting..."
+                    : connected
+                      ? "✓ Connected"
+                      : item.supported
+                        ? "Connect"
+                        : "Soon"}
                 </Text>
               </Pressable>
             </View>
@@ -154,7 +210,12 @@ const styles = StyleSheet.create({
     lineHeight: 34,
     marginBottom: 8,
   },
-  pageSub: { fontSize: 14, lineHeight: 20, marginBottom: 20 },
+  pageSub: { fontSize: 14, lineHeight: 20, marginBottom: 12 },
+  errorText: {
+    fontSize: 13,
+    lineHeight: 18,
+    marginBottom: 8,
+  },
   sectionHeader: {
     fontSize: 12,
     fontWeight: "600",
@@ -183,7 +244,13 @@ const styles = StyleSheet.create({
   integrationInfo: { flex: 1 },
   integrationName: { fontSize: 15, fontWeight: "600" },
   integrationDesc: { fontSize: 12, marginTop: 1 },
-  connectBtn: { paddingHorizontal: 14, paddingVertical: 7, borderRadius: 8 },
+  connectBtn: {
+    paddingHorizontal: 14,
+    paddingVertical: 7,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: "transparent",
+  },
   connectBtnText: { fontSize: 12, fontWeight: "600" },
   buttons: { marginTop: 24, gap: 10 },
   btnPrimary: { paddingVertical: 16, borderRadius: 14, alignItems: "center" },

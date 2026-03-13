@@ -1,3 +1,4 @@
+import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'expo-router';
 import React from 'react';
 import {
@@ -11,6 +12,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { type AppTheme } from '@/constants/colors';
 import { useAppTheme } from '@/hooks/use-app-theme';
+import { authClient } from '@/utils/auth';
+import { useTRPC } from '@/utils/trpc';
 
 function WidgetMiniHero({ c }: { c: AppTheme }) {
   return (
@@ -107,6 +110,34 @@ export default function WidgetsScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const c = useAppTheme();
+  const trpc = useTRPC();
+  const { data: session } = authClient.useSession();
+
+  const healthQuery = useQuery(trpc.meta.health.queryOptions());
+  const viewerQuery = useQuery(
+    trpc.viewer.me.queryOptions(undefined, {
+      enabled: Boolean(session),
+      retry: false,
+    }),
+  );
+  const layoutsQuery = useQuery(trpc.widgets.layouts.queryOptions());
+
+  const pageTitle = viewerQuery.data?.name
+    ? `${viewerQuery.data.name.split(' ')[0]}'s widgets`
+    : 'Your widgets';
+  const statusText = healthQuery.data
+    ? `tRPC online via ${healthQuery.data.source} · Synced ${new Date(
+        healthQuery.data.serverTime,
+      ).toLocaleTimeString([], {
+        hour: 'numeric',
+        minute: '2-digit',
+      })}`
+    : healthQuery.isError
+      ? 'Server unavailable · Check the Next.js app'
+      : 'Syncing with server...';
+  const layoutsLabel = layoutsQuery.data?.length
+    ? `${layoutsQuery.data.length} layouts ready for your home screen`
+    : 'Pick a layout for your home screen';
 
   return (
     <ScrollView
@@ -115,12 +146,12 @@ export default function WidgetsScreen() {
         styles.content,
         { paddingTop: insets.top + 12, paddingBottom: insets.bottom + 80 },
       ]}>
-      <Text style={[styles.pageTitle, { color: c.t1 }]}>Your widgets</Text>
+      <Text style={[styles.pageTitle, { color: c.t1 }]}>{pageTitle}</Text>
 
       <View style={[styles.statusOk, { backgroundColor: c.statusGreenBg, borderColor: c.statusGreenBorder }]}>
         <View style={[styles.statusDot, { backgroundColor: c.green }]} />
         <Text style={[styles.statusText, { color: c.green }]}>
-          All sources synced · Updated 2 min ago
+          {statusText}
         </Text>
       </View>
 
@@ -153,7 +184,7 @@ export default function WidgetsScreen() {
         <Text style={[styles.addWidgetIcon, { color: c.t3 }]}>+</Text>
         <Text style={[styles.addWidgetTitle, { color: c.t1 }]}>Add a widget</Text>
         <Text style={[styles.addWidgetSub, { color: c.t3 }]}>
-          Pick a layout for your home screen
+          {layoutsLabel}
         </Text>
       </Pressable>
     </ScrollView>

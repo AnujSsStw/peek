@@ -47,4 +47,4 @@ export const AppColors = {
   },
 } as const;
 
-export type AppTheme = typeof AppColors.light;
+export type AppTheme = (typeof AppColors)[keyof typeof AppColors];

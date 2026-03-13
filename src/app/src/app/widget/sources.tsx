@@ -4,25 +4,7 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { useAppTheme } from "@/hooks/use-app-theme";
-
-function Toggle({
-  on,
-  onToggle,
-  c,
-}: {
-  on: boolean;
-  onToggle: () => void;
-  c: { green: string; toggleOff: string };
-}) {
-  return (
-    <Pressable
-      style={[styles.toggle, { backgroundColor: on ? c.green : c.toggleOff }]}
-      onPress={onToggle}
-    >
-      <View style={[styles.toggleThumb, on && styles.toggleThumbOn]} />
-    </Pressable>
-  );
-}
+import { Toggle } from "@/components/toggle";
 
 type CalendarItem = { name: string; color: string; enabled: boolean };
 

@@ -5,10 +5,11 @@ import {
 } from "@react-navigation/native";
 import { Stack, useRouter, useSegments } from "expo-router";
 import React, { useEffect } from "react";
-import { useColorScheme } from "react-native";
+import { ActivityIndicator, useColorScheme, View } from "react-native";
 
 import { AppColors } from "@/constants/colors";
 import { authClient } from "@/utils/auth";
+import { TRPCReactProvider } from "@/utils/trpc";
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -21,7 +22,7 @@ export default function RootLayout() {
   const router = useRouter();
 
   useEffect(() => {
-    if (isPending) return; // here show splash screen or loader
+    if (isPending) return;
 
     const inAuthGroup = segments[0] === "onboarding";
 
@@ -32,30 +33,50 @@ export default function RootLayout() {
     }
   }, [session, isPending, segments]);
 
+  if (isPending) {
+    return (
+      // show splash/loading screen while checking auth
+      <ThemeProvider value={isDark ? DarkTheme : DefaultTheme}>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: colors.bg,
+          }}
+        >
+          <ActivityIndicator size="large" color={colors.blue} />
+        </View>
+      </ThemeProvider>
+    );
+  }
+
   return (
-    <ThemeProvider value={isDark ? DarkTheme : DefaultTheme}>
-      <Stack
-        screenOptions={{
-          headerShown: false,
-          contentStyle: { backgroundColor: colors.bg },
-        }}
-      >
-        <Stack.Screen name="(tabs)" />
-        <Stack.Screen
-          name="onboarding/welcome"
-          options={{ animation: "fade" }}
-        />
-        <Stack.Screen name="onboarding/connect" />
-        <Stack.Screen name="onboarding/login" />
-        <Stack.Screen
-          name="widget/pick"
-          options={{ presentation: "modal", animation: "slide_from_bottom" }}
-        />
-        <Stack.Screen name="widget/customize" />
-        <Stack.Screen name="widget/sources" />
-        <Stack.Screen name="integration-detail" />
-        <Stack.Screen name="notifications" />
-      </Stack>
-    </ThemeProvider>
+    <TRPCReactProvider>
+      <ThemeProvider value={isDark ? DarkTheme : DefaultTheme}>
+        <Stack
+          screenOptions={{
+            headerShown: false,
+            contentStyle: { backgroundColor: colors.bg },
+          }}
+        >
+          <Stack.Screen name="(tabs)" />
+          <Stack.Screen
+            name="onboarding/welcome"
+            options={{ animation: "fade" }}
+          />
+          <Stack.Screen name="onboarding/connect" />
+          <Stack.Screen name="onboarding/login" />
+          <Stack.Screen
+            name="widget/pick"
+            options={{ presentation: "modal", animation: "slide_from_bottom" }}
+          />
+          <Stack.Screen name="widget/customize" />
+          <Stack.Screen name="widget/sources" />
+          <Stack.Screen name="integration-detail" />
+          <Stack.Screen name="notifications" />
+        </Stack>
+      </ThemeProvider>
+    </TRPCReactProvider>
   );
 }
