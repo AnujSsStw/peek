@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, use } from "react";
+import { useState, useEffect, useCallback, use, Suspense } from "react";
 import Link from "next/link";
 import { useTRPC } from "@/lib/trpc/client";
 import { useQuery, useMutation } from "@tanstack/react-query";
@@ -161,7 +161,15 @@ function removeWidget(id: string) {
 // ── Main component ─────────────────────────────────────────────────────
 type Step = "login" | "connect" | "widgets";
 
-export default function GetStartedPage() {
+export default function GetStartedPageWrapper() {
+  return (
+    <Suspense>
+      <GetStartedPage />
+    </Suspense>
+  );
+}
+
+function GetStartedPage() {
   const trpc = useTRPC();
   const searchParams = useSearchParams();
   const [step, setStep] = useState<Step>("login");

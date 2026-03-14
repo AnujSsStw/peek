@@ -47,16 +47,16 @@ const widgetConfig: WithAndroidWidgetsParams = {
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
-  name: "app",
-  slug: "app",
+  name: "Peek",
+  slug: "peek",
   version: "1.0.0",
   orientation: "portrait",
   icon: "./assets/images/icon.png",
-  scheme: "app",
+  scheme: "peek",
   userInterfaceStyle: "automatic",
   ios: {
     icon: "./assets/expo.icon",
-    bundleIdentifier: "com.yourcompany.app",
+    bundleIdentifier: "com.peek.app",
   },
   android: {
     adaptiveIcon: {
@@ -65,7 +65,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       backgroundImage: "./assets/images/android-icon-background.png",
       monochromeImage: "./assets/images/android-icon-monochrome.png",
     },
-    package: "com.yourcompany.app",
+    package: "com.peek.app",
   },
   web: {
     output: "static",
