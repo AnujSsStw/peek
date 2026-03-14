@@ -118,19 +118,25 @@ function resolveTodoistSchedule(task: {
   }
 
   if (task.due?.date) {
-    return {
-      iso: new Date(`${task.due.date}T00:00:00.000Z`).toISOString(),
-      isAllDay: true,
-      kind: "due" as const,
-    };
+    const d = new Date(`${task.due.date}T00:00:00.000Z`);
+    if (!isNaN(d.getTime())) {
+      return {
+        iso: d.toISOString(),
+        isAllDay: true,
+        kind: "due" as const,
+      };
+    }
   }
 
   if (task.deadline?.date) {
-    return {
-      iso: new Date(`${task.deadline.date}T00:00:00.000Z`).toISOString(),
-      isAllDay: true,
-      kind: "deadline" as const,
-    };
+    const d = new Date(`${task.deadline.date}T00:00:00.000Z`);
+    if (!isNaN(d.getTime())) {
+      return {
+        iso: d.toISOString(),
+        isAllDay: true,
+        kind: "deadline" as const,
+      };
+    }
   }
 
   return null;

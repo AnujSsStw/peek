@@ -61,7 +61,7 @@ const bentoBox: Record<string, BentoBoxData> = {
         icon: "📅",
         iconBg: "rgba(60,120,200,.12)",
         head: "Next Up",
-        val: "Factory Call",
+        val: "Study",
       },
       {
         icon: "🎯",
@@ -185,7 +185,7 @@ const bentoBox: Record<string, BentoBoxData> = {
 // ─── Timeline ───────────────────────────────────────────────────
 const timeline: Record<string, TimelineData> = {
   light: {
-    heading: "Good afternoon, Harsh",
+    heading: "Good afternoon, Ani",
     events: [
       {
         time: "9:00",
@@ -207,14 +207,14 @@ const timeline: Record<string, TimelineData> = {
       },
       {
         time: "15:00",
-        title: "Factory call — Shenzhen",
+        title: "Study — Shenzhen",
         meta: "45 min · Zoom",
       },
       { time: "17:00", title: "Evening walk", meta: "30 min" },
     ],
   },
   dark: {
-    heading: "Your evening, Harsh",
+    heading: "Your evening, Ani",
     events: [
       {
         time: "14:00",
@@ -254,7 +254,7 @@ const timeline: Record<string, TimelineData> = {
     ],
   },
   amber: {
-    heading: "Late night, Harsh",
+    heading: "Late night, Ani",
     events: [
       {
         time: "19:00",
@@ -278,7 +278,7 @@ const timeline: Record<string, TimelineData> = {
       { time: "09:00", title: "Journal", meta: "Done", status: "past" },
       { time: "10:30", title: "Standup", meta: "Done", status: "past" },
       { time: "13:00", title: "Deep work", meta: "Now", status: "active" },
-      { time: "15:00", title: "Factory call", meta: "Zoom" },
+      { time: "15:00", title: "Study", meta: "Zoom" },
       { time: "17:00", title: "Walk", meta: "30m" },
     ],
   },
@@ -317,7 +317,7 @@ const inlineEvents: TimelineTasksData["events"] = [
   { time: "", title: "Fix push notif copy", meta: "Quick win", type: "task" },
   {
     time: "15:00",
-    title: "Factory call — Shenzhen",
+    title: "Study — Shenzhen",
     meta: "45 min · Zoom",
     type: "event",
   },
@@ -352,7 +352,7 @@ const timelineTasks: Record<string, TimelineTasksData> = {
         status: "active",
         type: "event",
       },
-      { time: "15:00", title: "Factory call", meta: "Zoom", type: "event" },
+      { time: "15:00", title: "Study", meta: "Zoom", type: "event" },
     ],
     taskBlock: {
       title: "Tasks",
@@ -420,7 +420,7 @@ const timelineTasks: Record<string, TimelineTasksData> = {
       },
       {
         time: "15:00",
-        title: "Factory call — Shenzhen",
+        title: "Study — Shenzhen",
         meta: "45 min · Zoom",
         type: "event",
         subtasks: [
@@ -456,7 +456,7 @@ const timelineTasks: Record<string, TimelineTasksData> = {
       },
       {
         time: "15:00",
-        title: "Factory call — Shenzhen",
+        title: "Study — Shenzhen",
         meta: "45 min · Zoom",
         type: "event",
         subtasks: [
@@ -485,7 +485,7 @@ const timelineTasks: Record<string, TimelineTasksData> = {
         status: "active",
         type: "event",
       },
-      { time: "15:00", title: "Factory call", meta: "Zoom", type: "event" },
+      { time: "15:00", title: "Study", meta: "Zoom", type: "event" },
     ],
     floatingTask: {
       icon: "→",
@@ -512,7 +512,7 @@ const timelineTasks: Record<string, TimelineTasksData> = {
         status: "active",
         type: "event",
       },
-      { time: "15:00", title: "Factory call", meta: "Zoom", type: "event" },
+      { time: "15:00", title: "Study", meta: "Zoom", type: "event" },
     ],
     floatingTask: {
       icon: "→",
@@ -541,7 +541,7 @@ const timelineTasks: Record<string, TimelineTasksData> = {
       },
       {
         time: "15:00",
-        title: "Factory call — Shenzhen",
+        title: "Study — Shenzhen",
         meta: "45 min",
         type: "event",
       },
@@ -617,7 +617,7 @@ const minimalistStack: Record<string, MinimalistStackData> = {
   eink: {
     top: "THU 12 MAR · Focus",
     mid: "Deep work block until 15:00",
-    bot: "3 tasks queued — factory call at 15:00",
+    bot: "3 tasks queued — Study at 15:00",
   },
 };
 

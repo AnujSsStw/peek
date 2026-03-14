@@ -15,8 +15,10 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { useAppTheme } from "@/hooks/use-app-theme";
 import { authClient } from "@/utils/auth";
+import { getBaseUrl } from "@/utils/base-url";
 import { useTRPC } from "@/utils/trpc";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import * as Linking from "expo-linking";
 import { GOOGLE_CALENDAR_SCOPES } from "../onboarding/connect";
 
 function SectionHeader({ title, c }: { title: string; c: any }) {
@@ -297,7 +299,7 @@ export default function SettingsScreen() {
 
       <IntegrationsSection c={c} />
 
-      <SectionHeader title="Widgets" c={c} />
+      {/* <SectionHeader title="Widgets" c={c} />
       <View
         style={[
           styles.card,
@@ -311,7 +313,7 @@ export default function SettingsScreen() {
           desc="Every 15 minutes"
           c={c}
         />
-      </View>
+      </View> */}
 
       <SectionHeader title="App" c={c} />
       <View
@@ -348,7 +350,13 @@ export default function SettingsScreen() {
             />
           </Pressable>
         </View>
-        <SettingsRow icon="❓" iconBg={c.card} name="Help & Support" c={c} />
+        <SettingsRow
+          icon="❓"
+          iconBg={c.card}
+          name="Help & Support"
+          c={c}
+          onPress={() => Linking.openURL(`${getBaseUrl()}/help`)}
+        />
       </View>
 
       <Pressable

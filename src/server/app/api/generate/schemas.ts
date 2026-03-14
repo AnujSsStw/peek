@@ -90,7 +90,7 @@ const timelineSchema = z.object({
   data: z.object({
     heading: z
       .string()
-      .describe("Top heading, e.g. 'Good afternoon, Harsh'. Max 30 chars."),
+      .describe("Top heading, e.g. 'Good afternoon, Ani'. Max 30 chars."),
     events: z
       .array(timelineEventSchema)
       .min(3)
@@ -116,7 +116,9 @@ const timelineTaskEventSchema = z.object({
   type: z
     .enum(["event", "task"])
     .nullable()
-    .describe("'task' for inline task items, 'event' for calendar events, null if obvious"),
+    .describe(
+      "'task' for inline task items, 'event' for calendar events, null if obvious",
+    ),
   subtasks: z
     .array(subTaskSchema)
     .nullable()

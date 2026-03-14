@@ -1,62 +1,13 @@
-import Image from "next/image";
 import { redirect } from "next/navigation";
-import { auth, getSession } from "@/lib/auth";
-import { headers } from "next/headers";
+import { getSession } from "@/lib/auth";
+import { Dashboard } from "./dashboard";
 
-export default function Home() {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <AuthShowcase />
-    </div>
-  );
-}
-
-export async function AuthShowcase() {
+export default async function RootPage() {
   const session = await getSession();
 
-  if (!session) {
-    return (
-      <form>
-        <button
-          formAction={async () => {
-            "use server";
-            const res = await auth.api.signInSocial({
-              body: {
-                provider: "google",
-                callbackURL: "/",
-              },
-            });
-            if (!res.url) {
-              throw new Error("No URL returned from signInSocial");
-            }
-            redirect(res.url);
-          }}
-        >
-          Sign in with Google
-        </button>
-      </form>
-    );
+  if (!session?.user) {
+    redirect("/welcome");
   }
 
-  return (
-    <div className="flex flex-col items-center justify-center gap-4">
-      <p className="text-center text-2xl">
-        <span>Logged in as {session.user.name}</span>
-      </p>
-
-      <form>
-        <button
-          formAction={async () => {
-            "use server";
-            await auth.api.signOut({
-              headers: await headers(),
-            });
-            redirect("/");
-          }}
-        >
-          Sign out
-        </button>
-      </form>
-    </div>
-  );
+  return <Dashboard user={session.user} />;
 }

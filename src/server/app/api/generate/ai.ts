@@ -82,15 +82,9 @@ Bars: Tasks (from completion ratio), Focus (from focus time usage), Move (estima
 Each bar: label (≤10 chars), percent (0-100), color (CSS hex color).`,
 };
 
-export async function generateWidgetData(
-  layout: LayoutType,
-  ctx: GenerateContext,
-): Promise<{ variant: string; data: Record<string, unknown> }> {
-  const schema = getSchemaForLayout(layout);
-  const systemPrompt = LAYOUT_PROMPTS[layout];
+function buildUserPrompt(ctx: GenerateContext) {
   const { calendar, weather, date, currentTime } = ctx;
-
-  const userPrompt = `Here is today's context. Pick the best variant and generate widget data.
+  return `Here is today's context. Pick the best variant and generate widget data.
 
 Date: ${date}
 Current time: ${currentTime}
@@ -102,14 +96,38 @@ Tasks (${calendar.tasks.filter((t) => t.done).length}/${calendar.tasks.length} d
 ${calendar.tasks.map((t) => `- [${t.done ? "x" : " "}] ${t.title} (${t.priority})`).join("\n")}
 
 Weather: ${weather.icon} ${weather.temp_c}°C ${weather.condition}`;
+}
+
+export async function generateWidgetData(
+  layout: LayoutType,
+  ctx: GenerateContext,
+): Promise<{ variant: string; data: Record<string, unknown> }> {
+  const schema = getSchemaForLayout(layout);
+  const systemPrompt = LAYOUT_PROMPTS[layout];
 
   const { object } = await generateObject({
     model: openai("gpt-5-mini-2025-08-07"),
     schema,
     system: systemPrompt,
-    prompt: userPrompt,
+    prompt: buildUserPrompt(ctx),
   });
 
   const result = object as { variant: string; data: Record<string, unknown> };
   return { variant: result.variant, data: result.data };
+}
+
+export async function generateBatchWidgetData(
+  layouts: LayoutType[],
+  ctx: GenerateContext,
+): Promise<Record<string, { variant: string; data: Record<string, unknown> }>> {
+  if (layouts.length === 0) return {};
+
+  const entries = await Promise.all(
+    layouts.map(async (layout) => {
+      const result = await generateWidgetData(layout, ctx);
+      return [layout, result] as const;
+    }),
+  );
+
+  return Object.fromEntries(entries);
 }
