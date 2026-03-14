@@ -1,0 +1,98 @@
+[
+  {
+    "id": "PV001",
+    "title": "Preview page renders Contextual Hero section with all 9 variants",
+    "description": "Verify the preview page shows all Contextual Hero widget variants",
+    "steps": [
+      "Navigate to /preview",
+      "Wait for the page to fully load",
+      "Verify the heading 'Widget Screenshot Preview' is visible",
+      "Scroll to find the 'Contextual Hero' section heading",
+      "Verify the section contains widget preview images (img elements)",
+      "Count the number of widget images in the Contextual Hero section - there should be 9 variant previews",
+      "Verify all images have loaded successfully (no broken images, naturalWidth > 0)"
+    ]
+  },
+  {
+    "id": "PV002",
+    "title": "Preview page renders Bento Box section with all 6 variants",
+    "description": "Verify the preview page shows all Bento Box widget variants",
+    "steps": [
+      "Navigate to /preview",
+      "Wait for the page to fully load",
+      "Scroll to find the 'Bento Box' section heading",
+      "Verify the section contains widget preview images",
+      "Count the number of widget images in the Bento Box section - there should be 6 variant previews",
+      "Verify all images have loaded successfully (naturalWidth > 0)"
+    ]
+  },
+  {
+    "id": "PV003",
+    "title": "Preview page renders Timeline section with all 5 variants",
+    "description": "Verify the preview page shows all Timeline widget variants",
+    "steps": [
+      "Navigate to /preview",
+      "Wait for the page to fully load",
+      "Scroll to find the 'Timeline' section heading (the standalone Timeline, not Timeline + Tasks)",
+      "Verify the section contains widget preview images",
+      "Count the number of widget images in the Timeline section - there should be 5 variant previews",
+      "Verify all images have loaded successfully"
+    ]
+  },
+  {
+    "id": "PV004",
+    "title": "Preview page renders all 5 Timeline + Tasks sub-variant sections",
+    "description": "Verify the preview page shows all Timeline + Tasks sub-variant sections",
+    "steps": [
+      "Navigate to /preview",
+      "Wait for the page to fully load",
+      "Scroll to find 'Timeline + Tasks' sections",
+      "Verify 'Inline' sub-variant section exists with 2 widget images (light, dark)",
+      "Verify 'Pinned' or 'Pinned Block' sub-variant section exists with 2 widget images",
+      "Verify 'Nested' or 'Nested Sub-tasks' sub-variant section exists with 2 widget images",
+      "Verify 'Floating' or 'Floating Card' sub-variant section exists with 2 widget images",
+      "Verify 'Progress' or 'Progress Header' sub-variant section exists with 2 widget images",
+      "Verify all images have loaded successfully"
+    ]
+  },
+  {
+    "id": "PV005",
+    "title": "Preview page renders Minimalist Stack section with all 7 variants",
+    "description": "Verify the preview page shows all Minimalist Stack widget variants",
+    "steps": [
+      "Navigate to /preview",
+      "Wait for the page to fully load",
+      "Scroll to find the 'Minimalist Stack' section heading",
+      "Verify the section contains widget preview images",
+      "Count the number of widget images - there should be 7 variant previews",
+      "Verify all images have loaded successfully"
+    ]
+  },
+  {
+    "id": "PV006",
+    "title": "Preview page renders Progress Ring, Companion Quote, Streak Flame, Daily Score sections",
+    "description": "Verify the preview page shows all remaining widget layout sections",
+    "steps": [
+      "Navigate to /preview",
+      "Wait for the page to fully load",
+      "Scroll to find the 'Progress Ring' section - verify it has 2 widget images (dark, light)",
+      "Scroll to find the 'Companion Quote' section - verify it has 2 widget images (warm, frost)",
+      "Scroll to find the 'Streak Flame' section - verify it has 2 widget images (fire, cool)",
+      "Scroll to find the 'Daily Score' section - verify it has 2 widget images (dark, light)",
+      "Verify all images across all sections have loaded successfully (no broken images)"
+    ]
+  },
+  {
+    "id": "PV007",
+    "title": "Preview page total widget count matches expected 45 variants",
+    "description": "Verify the total number of widget preview images on the preview page",
+    "steps": [
+      "Navigate to /preview",
+      "Wait for the page to fully load with a longer timeout (30 seconds) since all widget images need to render",
+      "Count ALL widget preview img elements on the entire page",
+      "Verify the total count is at least 45 (9 contextual-hero + 6 bento-box + 5 timeline + 10 timeline-tasks + 7 minimalist-stack + 2 progress-ring + 2 companion-quote + 2 streak-flame + 2 daily-score)",
+      "Scroll through the entire page to trigger any lazy-loaded images",
+      "Verify no images are broken (check for error states or zero-size images)"
+    ]
+  }
+]

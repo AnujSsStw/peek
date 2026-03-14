@@ -1,0 +1,52 @@
+[
+  {
+    "id": "SS001",
+    "title": "POST /api/screenshot contextual-hero all 9 variants with mock data",
+    "description": "Test POST /api/screenshot for the contextual-hero layout with useMockData=true for all 9 variants. Send 9 sequential requests with JSON body {width: 400, height: 400, layout: 'contextual-hero', variant: VARIANT, useMockData: true} where VARIANT is each of: 'morning', 'urgent', 'night', 'focus', 'alert', 'calm', 'weather', 'energy', 'eink'. For each request verify status 200 and content-type header contains 'image/png'. Verify the response body is non-empty (length > 100 bytes) confirming a real PNG was generated."
+  },
+  {
+    "id": "SS002",
+    "title": "POST /api/screenshot bento-box all 6 variants with mock data",
+    "description": "Test POST /api/screenshot for the bento-box layout with useMockData=true for all 6 variants. Send 6 sequential requests with JSON body {width: 400, height: 200, layout: 'bento-box', variant: VARIANT, useMockData: true} where VARIANT is each of: 'frost', 'cream', 'charcoal', 'ocean', 'neon', 'eink'. For each request verify status 200, content-type contains 'image/png', and response body length > 100 bytes."
+  },
+  {
+    "id": "SS003",
+    "title": "POST /api/screenshot timeline all 5 variants with mock data",
+    "description": "Test POST /api/screenshot for the timeline layout with useMockData=true for all 5 variants. Send 5 sequential requests with JSON body {width: 400, height: 400, layout: 'timeline', variant: VARIANT, useMockData: true} where VARIANT is each of: 'light', 'dark', 'emerald', 'amber', 'eink'. For each request verify status 200, content-type contains 'image/png', and response body length > 100 bytes."
+  },
+  {
+    "id": "SS004",
+    "title": "POST /api/screenshot timeline-tasks inline and pinned variants with mock data",
+    "description": "Test POST /api/screenshot for timeline-tasks layout with useMockData=true. For timeline-tasks, the variant format is 'subVariant/theme'. Send 4 sequential requests with JSON body {width: 400, height: 400, layout: 'timeline-tasks', variant: VARIANT, useMockData: true} where VARIANT is each of: 'inline/light', 'inline/dark', 'pinned/light', 'pinned/dark'. For each request verify status 200, content-type contains 'image/png', and response body length > 100 bytes."
+  },
+  {
+    "id": "SS005",
+    "title": "POST /api/screenshot timeline-tasks nested floating progress variants with mock data",
+    "description": "Test POST /api/screenshot for timeline-tasks layout with useMockData=true. Send 6 sequential requests with JSON body {width: 400, height: 400, layout: 'timeline-tasks', variant: VARIANT, useMockData: true} where VARIANT is each of: 'nested/light', 'nested/dark', 'floating/light', 'floating/dark', 'progress/light', 'progress/dark'. For each request verify status 200, content-type contains 'image/png', and response body length > 100 bytes."
+  },
+  {
+    "id": "SS006",
+    "title": "POST /api/screenshot minimalist-stack all 7 variants with mock data",
+    "description": "Test POST /api/screenshot for the minimalist-stack layout with useMockData=true for all 7 variants. Send 7 sequential requests with JSON body {width: 400, height: 200, layout: 'minimalist-stack', variant: VARIANT, useMockData: true} where VARIANT is each of: 'light', 'dark', 'editorial', 'ink', 'brutal', 'neon', 'eink'. For each request verify status 200, content-type contains 'image/png', and response body length > 100 bytes."
+  },
+  {
+    "id": "SS007",
+    "title": "POST /api/screenshot progress-ring both variants with mock data",
+    "description": "Test POST /api/screenshot for the progress-ring layout with useMockData=true for both variants. Send 2 sequential requests with JSON body {width: 400, height: 400, layout: 'progress-ring', variant: VARIANT, useMockData: true} where VARIANT is each of: 'dark', 'light'. For each request verify status 200, content-type contains 'image/png', and response body length > 100 bytes."
+  },
+  {
+    "id": "SS008",
+    "title": "POST /api/screenshot companion-quote both variants with mock data",
+    "description": "Test POST /api/screenshot for the companion-quote layout with useMockData=true for both variants. Send 2 sequential requests with JSON body {width: 400, height: 200, layout: 'companion-quote', variant: VARIANT, useMockData: true} where VARIANT is each of: 'warm', 'frost'. For each request verify status 200, content-type contains 'image/png', and response body length > 100 bytes."
+  },
+  {
+    "id": "SS009",
+    "title": "POST /api/screenshot streak-flame both variants with mock data",
+    "description": "Test POST /api/screenshot for the streak-flame layout with useMockData=true for both variants. Send 2 sequential requests with JSON body {width: 400, height: 400, layout: 'streak-flame', variant: VARIANT, useMockData: true} where VARIANT is each of: 'fire', 'cool'. For each request verify status 200, content-type contains 'image/png', and response body length > 100 bytes."
+  },
+  {
+    "id": "SS010",
+    "title": "POST /api/screenshot daily-score both variants with mock data",
+    "description": "Test POST /api/screenshot for the daily-score layout with useMockData=true for both variants. Send 2 sequential requests with JSON body {width: 400, height: 200, layout: 'daily-score', variant: VARIANT, useMockData: true} where VARIANT is each of: 'dark', 'light'. For each request verify status 200, content-type contains 'image/png', and response body length > 100 bytes."
+  }
+]

@@ -1,0 +1,20 @@
+{
+  "status": "commited",
+  "type": "frontend",
+  "scope": "codebase",
+  "localEndpoint": "http://localhost:3000/preview",
+  "loginUser": "test@gmail.com",
+  "loginPassword": "test@gmail.com",
+  "executionArgs": {
+    "projectName": "server",
+    "projectPath": "/Users/ani/personal/peek/src/server",
+    "testIds": [],
+    "additionalInstruction": "These are FRONTEND browser tests for the /preview page. The page renders ALL widget variants as images.\n\nCRITICAL DETAILS:\n1. The page is at /preview - it's a public page, no auth needed.\n2. The page has a dark background (#08080a) with light text.\n3. Widget images are rendered via WidgetImage components which produce img elements.\n4. The images are loaded from the /api/screenshot endpoint - they may take time to render since each calls Puppeteer.\n5. USE LONG TIMEOUTS - wait up to 60 seconds for the page to fully load since it renders 45+ screenshots.\n6. Section headings contain the layout name like \"Contextual Hero (2×2)\", \"Bento Box (2×4)\" etc.\n7. To count images in a section, find the section heading then count img elements that follow it until the next section.\n8. For image load verification, check img.naturalWidth > 0 or img.complete === true.\n9. The page may lazy-load images - scroll through the entire page before counting.\n10. Timeline + Tasks has 5 sub-sections with headings containing \"Inline\", \"Pinned\", \"Nested\", \"Floating\", \"Progress\".",
+    "serverMode": "development",
+    "envs": {
+      "API_KEY": "sk-user-Z1QAXhWFsenM64CrrgODwbvc8PLK2YEYHr2MlZwmTsB8Sv0-z6noGS3n1Z8Tw2JCMYBNz8GiHpecAZPMZd_9-Jrt7DvMgKyA8Ts4_mfWdpQCOO77_BHXDGPKmZ7aHQiEwqc"
+    }
+  },
+  "serverPort": 63243,
+  "proxy": "http://c894e4bd-f89b-4ca7-925f-8a83eacde6bf:uhphsJRAdcTlmD25hy0Zy7n95I4qXueo@tun.testsprite.com:8080"
+}

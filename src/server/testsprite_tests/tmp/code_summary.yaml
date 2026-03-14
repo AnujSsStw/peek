@@ -1,0 +1,28 @@
+version: "2"
+type: frontend
+tech_stack:
+  - TypeScript
+  - Next.js 16
+  - React 19
+  - Tailwind CSS
+pages:
+  - path: /preview
+    description: Widget screenshot preview gallery showing all 9 layouts and 45 variants rendered via the /api/screenshot endpoint with mock data
+    elements:
+      - heading "Widget Screenshot Preview"
+      - 13 sections total (9 layouts, with timeline-tasks split into 5 sub-variant sections)
+      - Contextual Hero section with 9 variant images
+      - Bento Box section with 6 variant images
+      - Timeline section with 5 variant images
+      - Timeline + Tasks Inline section with 2 variant images
+      - Timeline + Tasks Pinned Block section with 2 variant images
+      - Timeline + Tasks Nested Sub-tasks section with 2 variant images
+      - Timeline + Tasks Floating Card section with 2 variant images
+      - Timeline + Tasks Progress Header section with 2 variant images
+      - Minimalist Stack section with 7 variant images
+      - Progress Ring section with 2 variant images
+      - Companion Quote section with 2 variant images
+      - Streak Flame section with 2 variant images
+      - Daily Score section with 2 variant images
+      - Each variant rendered as an img element via WidgetImage component
+known_limitations: []
