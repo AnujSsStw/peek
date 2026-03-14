@@ -707,6 +707,12 @@ export function getMockData(
   return keys.length > 0 ? variants[keys[0]] : undefined;
 }
 
+export function getRandomVariant(layout: LayoutType): string {
+  const variants = VARIANT_DATA[layout];
+  const keys = Object.keys(variants);
+  return keys[Math.floor(Math.random() * keys.length)];
+}
+
 /** Flat default data (first variant per layout) — for backward compat */
 export const MOCK_DATA: Record<LayoutType, WidgetData> = Object.fromEntries(
   Object.entries(VARIANT_DATA).map(([layout, variants]) => {

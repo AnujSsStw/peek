@@ -4,6 +4,11 @@ import { renderScreenshot } from "../screenshot/render-screenshot";
 import { getMockCalendarData } from "./calendar";
 import { getWeather } from "./weather";
 import { generateWidgetData } from "./ai";
+import { UTApi, UTFile } from "uploadthing/server";
+import {
+  getMockData,
+  getRandomVariant,
+} from "../screenshot/templates/mock-data";
 
 const VALID_LAYOUTS: Set<string> = new Set<string>([
   "contextual-hero",
@@ -33,6 +38,14 @@ export async function POST(request: Request) {
   }
 
   const { width, height, layout, date, currentTime, location } = body;
+  console.log("Generation request received with parameters:", {
+    width,
+    height,
+    layout,
+    date,
+    currentTime,
+    location,
+  });
 
   // Validate dimensions
   if (
@@ -79,29 +92,50 @@ export async function POST(request: Request) {
       getWeather(location || "auto:ip"),
     ]);
 
-    const { variant, data } = await generateWidgetData(layout as LayoutType, {
-      calendar,
-      weather,
-      date,
-      currentTime,
-    });
+    // const { variant, data } = await generateWidgetData(layout as LayoutType, {
+    //   calendar,
+    //   weather,
+    //   date,
+    //   currentTime,
+    // });
 
+    // const buf = await renderScreenshot({
+    //   width,
+    //   height,
+    //   layout: layout as LayoutType,
+    //   variant,
+    //   data: data as any,
+    // });
+    const variant = getRandomVariant(layout as LayoutType);
+    const widgetData = getMockData(layout as LayoutType, variant)!;
     const buf = await renderScreenshot({
       width,
       height,
       layout: layout as LayoutType,
       variant,
-      data: data as any,
+      data: widgetData,
     });
 
-    // @ts-ignore
-    return new NextResponse(buf, {
-      status: 200,
-      headers: {
-        "Content-Type": "image/png",
-        "Cache-Control": "no-store",
-      },
+    const utapi = new UTApi();
+    const file = new UTFile(
+      [new Uint8Array(buf)],
+      `widget-${layout}-${width}x${height}-${Date.now()}.png`,
+      { type: "image/png" },
+    );
+    const uploaded = await utapi.uploadFiles(file);
+
+    if (!uploaded.data?.ufsUrl) {
+      return NextResponse.json(
+        { error: "Failed to upload widget image" },
+        { status: 500 },
+      );
+    }
+
+    console.log("Widget generated and uploaded:", {
+      imageUrl: uploaded.data.ufsUrl,
     });
+
+    return NextResponse.json({ url: uploaded.data.ufsUrl });
   } catch (err) {
     const message =
       err instanceof Error ? err.message : "Unknown generation error";

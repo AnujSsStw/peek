@@ -33,13 +33,13 @@ body {
    LAYOUT 1 — CONTEXTUAL HERO (2×2)
 ═══════════════════════════════════════════════ */
 .w1 {
-  width:170px; height:170px; border-radius:24px;
+  width:100vw; height:100vh; border-radius:0;
   display:flex; flex-direction:column; align-items:center; justify-content:center;
   padding:16px; position:relative; overflow:hidden;
 }
-.w1 .icon { font-size:26px; margin-bottom:4px; filter:drop-shadow(0 2px 5px rgba(0,0,0,.12)); font-family:var(--emoji); }
-.w1 .val { font-family:var(--sans); font-size:32px; font-weight:800; line-height:1; }
-.w1 .sub { font-size:13px; font-weight:500; margin-top:2px; }
+.w1 .icon { font-size:clamp(16px, 15vmin, 26px); margin-bottom:4px; filter:drop-shadow(0 2px 5px rgba(0,0,0,.12)); font-family:var(--emoji); }
+.w1 .val { font-family:var(--sans); font-size:clamp(18px, 19vmin, 32px); font-weight:800; line-height:1; }
+.w1 .sub { font-size:clamp(9px, 8vmin, 13px); font-weight:500; margin-top:2px; }
 
 .w1-morning {
   background: linear-gradient(145deg,#f2873a,#f9c9a0);
@@ -110,7 +110,7 @@ body {
    LAYOUT 2 — BENTO BOX (2×4 wide)
 ═══════════════════════════════════════════════ */
 .w2 {
-  width:360px; height:180px; border-radius:24px;
+  width:100vw; height:100vh; border-radius:0;
   padding:6px; display:grid;
   grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; gap:8px;
   overflow:hidden;
@@ -201,7 +201,7 @@ body {
    LAYOUT 3 — TIMELINE (4×4 square)
 ═══════════════════════════════════════════════ */
 .w3 {
-  width:340px; height:360px; border-radius:28px;
+  width:100vw; height:100vh; border-radius:0;
   padding:22px 18px 18px; display:flex; flex-direction:column;
   overflow:hidden;
 }
@@ -321,7 +321,7 @@ body {
    LAYOUT 4 — MINIMALIST STACK (2×4 wide)
 ═══════════════════════════════════════════════ */
 .w4 {
-  width:360px; height:170px; border-radius:24px;
+  width:100vw; height:100vh; border-radius:0;
   padding:22px 24px; display:flex; flex-direction:column;
   justify-content:space-between; overflow:hidden;
 }
@@ -396,7 +396,7 @@ body {
 
 /* Concept A: Progress Ring (2×2) */
 .wc-ring {
-  width:170px; height:170px; border-radius:24px;
+  width:100vw; height:100vh; border-radius:0;
   display:flex; flex-direction:column; align-items:center; justify-content:center;
   padding:16px; position:relative; overflow:hidden;
 }
@@ -430,7 +430,7 @@ body {
 
 /* Concept B: Companion Quote (2×4 wide) */
 .wc-quote {
-  width:360px; height:170px; border-radius:24px;
+  width:100vw; height:100vh; border-radius:0;
   padding:20px 24px; display:flex; flex-direction:column;
   justify-content:center; gap:10px; overflow:hidden; position:relative;
 }
@@ -468,7 +468,7 @@ body {
 
 /* Concept C: Streak Flame (2×2) */
 .wc-streak {
-  width:170px; height:170px; border-radius:24px;
+  width:100vw; height:100vh; border-radius:0;
   display:flex; flex-direction:column; align-items:center; justify-content:center;
   padding:16px; position:relative; overflow:hidden;
 }
@@ -493,7 +493,7 @@ body {
 
 /* Concept D: Daily Score (2×4 wide) */
 .wc-score {
-  width:360px; height:170px; border-radius:24px;
+  width:100vw; height:100vh; border-radius:0;
   padding:20px 24px; display:flex; align-items:center; gap:20px;
   overflow:hidden;
 }

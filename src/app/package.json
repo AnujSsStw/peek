@@ -1,6 +1,6 @@
 {
   "name": "app",
-  "main": "expo-router/entry",
+  "main": "./index.ts",
   "version": "1.0.0",
   "scripts": {
     "start": "expo start",
@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@better-auth/expo": "^1.5.5",
+    "@expo/ui": "~55.0.2",
     "@react-navigation/bottom-tabs": "^7.7.3",
     "@react-navigation/elements": "^2.8.1",
     "@react-navigation/native": "^7.1.28",
@@ -21,6 +22,8 @@
     "@trpc/tanstack-react-query": "^11.12.0",
     "better-auth": "^1.5.5",
     "expo": "~55.0.6",
+    "expo-background-fetch": "~55.0.9",
+    "expo-background-task": "~55.0.9",
     "expo-constants": "^55.0.7",
     "expo-device": "~55.0.9",
     "expo-font": "~55.0.4",
@@ -34,10 +37,12 @@
     "expo-status-bar": "~55.0.4",
     "expo-symbols": "~55.0.5",
     "expo-system-ui": "~55.0.9",
+    "expo-task-manager": "~55.0.9",
     "expo-web-browser": "^55.0.9",
     "react": "19.2.0",
     "react-dom": "19.2.0",
     "react-native": "0.83.2",
+    "react-native-android-widget": "^0.20.1",
     "react-native-gesture-handler": "~2.30.0",
     "react-native-reanimated": "4.2.1",
     "react-native-safe-area-context": "~5.6.2",
