@@ -17,6 +17,7 @@ import { useAppTheme } from "@/hooks/use-app-theme";
 import { authClient } from "@/utils/auth";
 import { useTRPC } from "@/utils/trpc";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { GOOGLE_CALENDAR_SCOPES } from "../onboarding/connect";
 
 function SectionHeader({ title, c }: { title: string; c: any }) {
   return <Text style={[styles.sectionHeader, { color: c.t3 }]}>{title}</Text>;
@@ -56,11 +57,6 @@ function SettingsRow({
     </Pressable>
   );
 }
-
-const GOOGLE_CALENDAR_SCOPES = [
-  "https://www.googleapis.com/auth/calendar.readonly",
-  "https://www.googleapis.com/auth/calendar.calendarlist.readonly",
-] as const;
 
 function IntegrationsSection({ c }: { c: any }) {
   const trpc = useTRPC();

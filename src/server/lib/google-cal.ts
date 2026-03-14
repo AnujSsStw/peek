@@ -8,11 +8,6 @@ import { integrationSource } from "@/lib/db/schema";
 const GOOGLE_PROVIDER_ID = "google";
 const GOOGLE_SOURCE_KIND = "calendar";
 
-export const GOOGLE_CALENDAR_SCOPES = [
-  "https://www.googleapis.com/auth/calendar.readonly",
-  "https://www.googleapis.com/auth/calendar.calendarlist.readonly",
-] as const;
-
 type IntegrationSourceRow = typeof integrationSource.$inferSelect;
 
 export type GoogleCalendarSource = {

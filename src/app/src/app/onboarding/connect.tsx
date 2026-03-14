@@ -8,7 +8,7 @@ import { authClient } from "@/utils/auth";
 import { useTRPC } from "@/utils/trpc";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
-const GOOGLE_CALENDAR_SCOPES = [
+export const GOOGLE_CALENDAR_SCOPES = [
   "https://www.googleapis.com/auth/calendar.readonly",
   "https://www.googleapis.com/auth/calendar.calendarlist.readonly",
 ] as const;

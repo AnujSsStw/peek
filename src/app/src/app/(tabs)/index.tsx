@@ -1,5 +1,6 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import {
+  RefreshControl,
   ScrollView,
   StyleSheet,
   Text,
@@ -40,67 +41,82 @@ export default function WidgetsScreen() {
   const { width: screenWidth } = useWindowDimensions();
   const [widgets, setWidgets] = useState<PlacedWidget[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const hasLoadedImages = useRef(false);
   const maxPreviewWidth = screenWidth - (20 + 16) * 2;
 
-  const loadWidgets = useCallback(async () => {
-    if (Platform.OS !== "android") {
-      setLoading(false);
-      return;
-    }
+  const loadWidgets = useCallback(
+    async (forceRefresh = false) => {
+      if (Platform.OS !== "android") {
+        setLoading(false);
+        return;
+      }
 
-    try {
-      const { getWidgetInfo } = await import("react-native-android-widget");
+      try {
+        const { getWidgetInfo } = await import("react-native-android-widget");
 
-      const results = await Promise.all(
-        WIDGET_NAMES.map((name) => getWidgetInfo(name)),
-      );
+        const results = await Promise.all(
+          WIDGET_NAMES.map((name) => getWidgetInfo(name)),
+        );
 
-      const allWidgets = results.flat();
+        const allWidgets = results.flat();
 
-      // First pass: set widgets with layout but no image yet
-      const withLayouts = await Promise.all(
-        allWidgets.map(async (w) => ({
-          ...w,
-          layout: await getWidgetLayout(w.widgetId),
-          imageUrl: null as string | null,
-        })),
-      );
+        // First pass: set widgets with layout but no image yet
+        const withLayouts = await Promise.all(
+          allWidgets.map(async (w) => ({
+            ...w,
+            layout: await getWidgetLayout(w.widgetId),
+            imageUrl: null as string | null,
+          })),
+        );
 
-      setWidgets(withLayouts);
-      setLoading(false);
+        setWidgets(withLayouts);
+        setLoading(false);
 
-      // Second pass: fetch images and update home screen widgets
-      const withImages = await Promise.all(
-        withLayouts.map(async (w) => {
-          if (!w.layout) return w;
-          const width = Math.round(w.width);
-          const height = Math.round(w.height);
-          const url = await fetchWidgetImage(width, height, w.layout);
+        // Only fetch images on first load or when pull-to-refresh
+        if (hasLoadedImages.current && !forceRefresh) return;
 
-          if (url) {
-            await requestWidgetUpdateById({
-              widgetName: w.widgetName,
-              widgetId: w.widgetId,
-              renderWidget: () => (
-                <PeekWidget
-                  imageUrl={url as `https:${string}`}
-                  width={width}
-                  height={height}
-                />
-              ),
-            });
-          }
+        // Second pass: fetch images and update home screen widgets
+        const withImages = await Promise.all(
+          withLayouts.map(async (w) => {
+            if (!w.layout) return w;
+            const width = Math.round(w.width);
+            const height = Math.round(w.height);
+            const url = await fetchWidgetImage(width, height, w.layout);
 
-          return { ...w, imageUrl: url };
-        }),
-      );
+            if (url) {
+              await requestWidgetUpdateById({
+                widgetName: w.widgetName,
+                widgetId: w.widgetId,
+                renderWidget: () => (
+                  <PeekWidget
+                    imageUrl={url as `https:${string}`}
+                    width={width}
+                    height={height}
+                  />
+                ),
+              });
+            }
 
-      setWidgets(withImages);
-    } catch (err) {
-      console.error("Failed to load widgets:", err);
-      setLoading(false);
-    }
-  }, []);
+            return { ...w, imageUrl: url };
+          }),
+        );
+
+        setWidgets(withImages);
+        hasLoadedImages.current = true;
+      } catch (err) {
+        console.error("Failed to load widgets:", err);
+        setLoading(false);
+      }
+    },
+    [],
+  );
+
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await loadWidgets(true);
+    setRefreshing(false);
+  }, [loadWidgets]);
 
   useFocusEffect(
     useCallback(() => {
@@ -115,6 +131,9 @@ export default function WidgetsScreen() {
         styles.content,
         { paddingTop: insets.top + 12, paddingBottom: insets.bottom + 80 },
       ]}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
     >
       <Text style={[styles.pageTitle, { color: c.t1 }]}>Your widgets</Text>
 

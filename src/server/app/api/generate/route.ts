@@ -1,14 +1,11 @@
 import { NextResponse } from "next/server";
 import type { LayoutType } from "../screenshot/types";
 import { renderScreenshot } from "../screenshot/render-screenshot";
-import { getMockCalendarData } from "./calendar";
+import { getCalendarData } from "./calendar";
 import { getWeather } from "./weather";
 import { generateWidgetData } from "./ai";
+import { auth } from "@/lib/auth";
 import { UTApi, UTFile } from "uploadthing/server";
-import {
-  getMockData,
-  getRandomVariant,
-} from "../screenshot/templates/mock-data";
 
 const VALID_LAYOUTS: Set<string> = new Set<string>([
   "contextual-hero",
@@ -29,7 +26,8 @@ export async function POST(request: Request) {
     layout?: string;
     date?: string; // e.g. "Thursday, March 13"
     currentTime?: string; // e.g. "13:42" or "1:42 PM"
-    location?: string; //TODO: will be db call
+    location?: string; // e.g. "lat,lng" or "auto:ip"
+    timezone?: string;
   };
   try {
     body = await request.json();
@@ -37,13 +35,14 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
   }
 
-  const { width, height, layout, date, currentTime, location } = body;
+  const { width, height, layout, date, currentTime, timezone, location } = body;
   console.log("Generation request received with parameters:", {
     width,
     height,
     layout,
     date,
     currentTime,
+    timezone,
     location,
   });
 
@@ -87,34 +86,46 @@ export async function POST(request: Request) {
   }
 
   try {
+    const session = await auth.api.getSession({
+      headers: request.headers,
+    });
+
+    if (!session?.user?.id) {
+      return NextResponse.json(
+        { error: "Authentication required" },
+        { status: 401 },
+      );
+    }
+
     const [calendar, weather] = await Promise.all([
-      Promise.resolve(getMockCalendarData()),
+      getCalendarData(session.user.id, timezone || "UTC"),
       getWeather(location || "auto:ip"),
     ]);
 
-    // const { variant, data } = await generateWidgetData(layout as LayoutType, {
-    //   calendar,
-    //   weather,
-    //   date,
-    //   currentTime,
-    // });
+    const { variant, data } = await generateWidgetData(layout as LayoutType, {
+      calendar,
+      weather,
+      date,
+      currentTime,
+    });
 
-    // const buf = await renderScreenshot({
-    //   width,
-    //   height,
-    //   layout: layout as LayoutType,
-    //   variant,
-    //   data: data as any,
-    // });
-    const variant = getRandomVariant(layout as LayoutType);
-    const widgetData = getMockData(layout as LayoutType, variant)!;
     const buf = await renderScreenshot({
       width,
       height,
       layout: layout as LayoutType,
       variant,
-      data: widgetData,
+      data: data as any,
     });
+
+    // const variant = getRandomVariant(layout as LayoutType);
+    // const widgetData = getMockData(layout as LayoutType, variant)!;
+    // const buf = await renderScreenshot({
+    //   width,
+    //   height,
+    //   layout: layout as LayoutType,
+    //   variant,
+    //   data: widgetData,
+    // });
 
     const utapi = new UTApi();
     const file = new UTFile(

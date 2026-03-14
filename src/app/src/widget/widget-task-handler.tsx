@@ -2,7 +2,12 @@ import React from "react";
 import type { WidgetTaskHandlerProps } from "react-native-android-widget";
 import { PeekWidget, PeekWidgetLoading } from "./PeekWidget";
 import { getBaseUrl } from "@/utils/base-url";
-import { getWidgetLayout, removeWidgetLayout } from "./widget-storage";
+import {
+  getWidgetLayout,
+  removeWidgetLayout,
+  getStoredLocation,
+} from "./widget-storage";
+import { authClient } from "@/utils/auth";
 
 const RESIZE_THROTTLE_MS = 2000;
 const lastResizeByWidget = new Map<number, number>();
@@ -12,28 +17,44 @@ export async function fetchWidgetImage(
   height: number,
   layout: string,
 ): Promise<string | null> {
+  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const now = new Date();
   const date = now.toLocaleDateString("en-US", {
     weekday: "long",
     month: "long",
     day: "numeric",
+    timeZone: timezone,
   });
   const currentTime = now.toLocaleTimeString("en-US", {
     hour: "numeric",
     minute: "2-digit",
     hour12: false,
+    timeZone: timezone,
   });
+  const location = (await getStoredLocation()) ?? undefined;
 
   try {
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+    };
+
+    const cookies = authClient.getCookie?.();
+    if (cookies) {
+      headers["Cookie"] = cookies;
+    }
+
     const res = await fetch(`${getBaseUrl()}/api/generate`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers,
+      credentials: "include",
       body: JSON.stringify({
         width: Math.round(width),
         height: Math.round(height),
         layout,
         date,
         currentTime,
+        timezone,
+        location,
       }),
     });
 

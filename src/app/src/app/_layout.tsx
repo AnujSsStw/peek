@@ -6,10 +6,12 @@ import {
 import { Stack, useRouter, useSegments } from "expo-router";
 import React, { useEffect } from "react";
 import { ActivityIndicator, useColorScheme, View } from "react-native";
+import * as Location from "expo-location";
 
 import { AppColors } from "@/constants/colors";
 import { authClient } from "@/utils/auth";
 import { TRPCReactProvider } from "@/utils/trpc";
+import { setStoredLocation } from "@/widget/widget-storage";
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -32,6 +34,19 @@ export default function RootLayout() {
       router.replace("/(tabs)");
     }
   }, [session, isPending, segments]);
+
+  useEffect(() => {
+    (async () => {
+      if (!session) return;
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") return;
+
+      const loc = await Location.getCurrentPositionAsync({
+        accuracy: Location.Accuracy.Balanced,
+      });
+      await setStoredLocation(`${loc.coords.latitude},${loc.coords.longitude}`);
+    })();
+  }, []);
 
   if (isPending) {
     return (

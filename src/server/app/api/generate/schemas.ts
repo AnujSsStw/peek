@@ -55,12 +55,9 @@ const bentoBoxSchema = z.object({
     ),
   data: z.object({
     cells: z
-      .tuple([
-        bentoCellSchema,
-        bentoCellSchema,
-        bentoCellSchema,
-        bentoCellSchema,
-      ])
+      .array(bentoCellSchema)
+      .min(4)
+      .max(4)
       .describe(
         "Exactly 4 cells. Recommended order: Next event, Focus/time, Streak, Tasks.",
       ),
@@ -269,7 +266,9 @@ const dailyScoreSchema = z.object({
     score: z.number().min(0).max(100).describe("Overall day score"),
     title: z.string().describe("e.g. 'Today\\'s Score'. Max 20 chars."),
     bars: z
-      .tuple([scoreBarSchema, scoreBarSchema, scoreBarSchema])
+      .array(scoreBarSchema)
+      .min(3)
+      .max(3)
       .describe("Exactly 3 score bars: Tasks, Focus, Move"),
   }),
 });
