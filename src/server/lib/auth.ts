@@ -97,6 +97,9 @@ export function initAuth<
         prompt: "consent",
       },
     },
+    emailAndPassword: {
+      enabled: true,
+    },
     trustedOrigins: [
       "app://",
       "exp://",

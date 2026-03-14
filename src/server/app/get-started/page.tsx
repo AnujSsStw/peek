@@ -175,6 +175,12 @@ function GetStartedPage() {
   const [step, setStep] = useState<Step>("login");
   const [savedWidgets, setSavedWidgets] = useState<SavedWidget[]>([]);
   const [pickingLayout, setPickingLayout] = useState(false);
+  const [authMode, setAuthMode] = useState<"signin" | "signup">("signin");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [authError, setAuthError] = useState<string | null>(null);
+  const [authLoading, setAuthLoading] = useState(false);
 
   const { data: integrations, refetch: refetchIntegrations } = useQuery(
     trpc.integrations.list.queryOptions(),
@@ -204,6 +210,41 @@ function GetStartedPage() {
       setStep("widgets");
     }
   }, [searchParams]);
+
+  const handleEmailAuth = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setAuthError(null);
+    setAuthLoading(true);
+    try {
+      if (authMode === "signup") {
+        const { error } = await authClient.signUp.email({
+          email,
+          password,
+          name,
+        });
+        if (error) {
+          setAuthError(error.message ?? "Sign up failed");
+        } else {
+          setStep("connect");
+        }
+      } else {
+        const { error } = await authClient.signIn.email({
+          email,
+          password,
+        });
+        if (error) {
+          setAuthError(error.message ?? "Sign in failed");
+        } else {
+          setStep("connect");
+        }
+      }
+    } catch (err) {
+      console.error("Auth error:", err);
+      setAuthError("Something went wrong. Please try again.");
+    } finally {
+      setAuthLoading(false);
+    }
+  };
 
   const handleGoogleSignIn = async () => {
     try {
@@ -417,7 +458,9 @@ function GetStartedPage() {
                 marginBottom: "12px",
               }}
             >
-              Sign in to get started
+              {authMode === "signup"
+                ? "Create your account"
+                : "Sign in to get started"}
             </h1>
             <p
               style={{
@@ -428,9 +471,203 @@ function GetStartedPage() {
                 maxWidth: "400px",
               }}
             >
-              Connect your Google account to sync calendars and personalize your
-              widgets.
+              {authMode === "signup"
+                ? "Sign up with your email to personalize your widgets."
+                : "Sign in with your email or Google account to get started."}
             </p>
+
+            {/* Email/password form */}
+            <form
+              onSubmit={handleEmailAuth}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "12px",
+                maxWidth: "380px",
+                marginBottom: "20px",
+              }}
+            >
+              {authMode === "signup" && (
+                <input
+                  type="text"
+                  placeholder="Name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                  style={{
+                    padding: "14px 16px",
+                    background: "var(--bg-up)",
+                    border: "1px solid var(--border-up)",
+                    borderRadius: "12px",
+                    color: "var(--text)",
+                    fontSize: "15px",
+                    fontFamily: "var(--sans)",
+                    outline: "none",
+                  }}
+                />
+              )}
+              <input
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                style={{
+                  padding: "14px 16px",
+                  background: "var(--bg-up)",
+                  border: "1px solid var(--border-up)",
+                  borderRadius: "12px",
+                  color: "var(--text)",
+                  fontSize: "15px",
+                  fontFamily: "var(--sans)",
+                  outline: "none",
+                }}
+              />
+              <input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                minLength={8}
+                style={{
+                  padding: "14px 16px",
+                  background: "var(--bg-up)",
+                  border: "1px solid var(--border-up)",
+                  borderRadius: "12px",
+                  color: "var(--text)",
+                  fontSize: "15px",
+                  fontFamily: "var(--sans)",
+                  outline: "none",
+                }}
+              />
+
+              {authError && (
+                <p
+                  style={{
+                    fontSize: "13px",
+                    color: "#e84040",
+                    margin: 0,
+                  }}
+                >
+                  {authError}
+                </p>
+              )}
+
+              <button
+                type="submit"
+                disabled={authLoading}
+                style={{
+                  padding: "16px 24px",
+                  background: "var(--accent)",
+                  color: "var(--bg)",
+                  border: "none",
+                  borderRadius: "14px",
+                  fontSize: "15px",
+                  fontWeight: 700,
+                  fontFamily: "var(--sans)",
+                  cursor: authLoading ? "wait" : "pointer",
+                  opacity: authLoading ? 0.6 : 1,
+                  transition: "opacity 0.2s",
+                }}
+              >
+                {authLoading
+                  ? "Loading..."
+                  : authMode === "signup"
+                    ? "Create Account"
+                    : "Sign In"}
+              </button>
+            </form>
+
+            <p
+              style={{
+                fontSize: "13px",
+                color: "var(--text-muted)",
+                maxWidth: "380px",
+                marginBottom: "24px",
+              }}
+            >
+              {authMode === "signin" ? (
+                <>
+                  Don&apos;t have an account?{" "}
+                  <button
+                    onClick={() => {
+                      setAuthMode("signup");
+                      setAuthError(null);
+                    }}
+                    style={{
+                      background: "none",
+                      border: "none",
+                      color: "var(--accent)",
+                      fontSize: "13px",
+                      fontWeight: 600,
+                      fontFamily: "var(--sans)",
+                      cursor: "pointer",
+                      padding: 0,
+                    }}
+                  >
+                    Sign up
+                  </button>
+                </>
+              ) : (
+                <>
+                  Already have an account?{" "}
+                  <button
+                    onClick={() => {
+                      setAuthMode("signin");
+                      setAuthError(null);
+                    }}
+                    style={{
+                      background: "none",
+                      border: "none",
+                      color: "var(--accent)",
+                      fontSize: "13px",
+                      fontWeight: 600,
+                      fontFamily: "var(--sans)",
+                      cursor: "pointer",
+                      padding: 0,
+                    }}
+                  >
+                    Sign in
+                  </button>
+                </>
+              )}
+            </p>
+
+            {/* Divider */}
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "16px",
+                maxWidth: "380px",
+                marginBottom: "20px",
+              }}
+            >
+              <div
+                style={{
+                  flex: 1,
+                  height: "1px",
+                  background: "var(--border-up)",
+                }}
+              />
+              <span
+                style={{
+                  fontSize: "12px",
+                  color: "var(--text-muted)",
+                  fontWeight: 500,
+                }}
+              >
+                or
+              </span>
+              <div
+                style={{
+                  flex: 1,
+                  height: "1px",
+                  background: "var(--border-up)",
+                }}
+              />
+            </div>
 
             <button
               onClick={handleGoogleSignIn}
