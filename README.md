@@ -2,6 +2,8 @@
 
 AI-powered personalized home screen widgets that synthesize your calendar, tasks, and weather into beautiful, contextually-aware glanceable cards.
 
+[Watch the demo on YouTube](https://youtu.be/zxKaZ6f1Gjc)
+
 [![Watch the demo](thumbnail.png)](https://youtu.be/zxKaZ6f1Gjc)
 
 ## Overview
