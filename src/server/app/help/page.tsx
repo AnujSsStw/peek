@@ -1,4 +1,12 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Help & Support",
+  description:
+    "Get help with Peek — setup guides, FAQ, troubleshooting, and support for your Android home screen widget.",
+  alternates: { canonical: "/help" },
+};
 
 const FAQ_ITEMS = [
   {
@@ -54,9 +62,23 @@ const CONTACT_CHANNELS = [
   },
 ];
 
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: FAQ_ITEMS.map((item) => ({
+    "@type": "Question",
+    name: item.q,
+    acceptedAnswer: { "@type": "Answer", text: item.a },
+  })),
+};
+
 export default function HelpPage() {
   return (
     <div style={{ minHeight: "100vh", position: "relative" }}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
       {/* Background accents */}
       <div
         style={{

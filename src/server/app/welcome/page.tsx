@@ -1,4 +1,23 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Peek — Your day, at a glance",
+  description:
+    "Peek turns your home screen into an intelligent daily dashboard. Calendar events, tasks, weather — all in one beautiful Android widget powered by AI.",
+  alternates: { canonical: "/welcome" },
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: "Peek",
+  applicationCategory: "UtilitiesApplication",
+  operatingSystem: "Android",
+  description:
+    "Peek turns your home screen into an intelligent daily dashboard. Calendar events, tasks, weather — all in one beautiful widget powered by AI.",
+  offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+};
 
 const HERO_WIDGETS = [
   { src: "/timeline-tasks_floating-light.png", alt: "Timeline tasks widget", rotate: -12, x: -20, y: 60, z: 1, w: 220 },
@@ -36,6 +55,10 @@ const GALLERY_ROWS = [
 export default function WelcomePage() {
   return (
     <div style={{ minHeight: "100vh", position: "relative", overflow: "hidden" }}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Background gradient orbs */}
       <div
         style={{
