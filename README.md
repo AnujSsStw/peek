@@ -30,11 +30,11 @@ Peek connects to your Google Calendar, Todoist, and local weather to generate sm
 
 9 layouts across 3 sizes:
 
-| Size | Layouts |
-|------|---------|
-| Small (2x2) | Contextual Hero, Progress Ring, Streak Flame |
+| Size         | Layouts                                                   |
+| ------------ | --------------------------------------------------------- |
+| Small (2x2)  | Contextual Hero, Progress Ring, Streak Flame              |
 | Medium (4x2) | Bento Box, Minimalist Stack, Companion Quote, Daily Score |
-| Large (4x4) | Timeline, Timeline + Tasks |
+| Large (4x4)  | Timeline, Timeline + Tasks                                |
 
 Each layout supports multiple style variants (morning, night, urgent, calm, weather, eink, frost, dark, etc.).
 
@@ -135,5 +135,10 @@ src/
     │   ├── google-cal.ts   # Google Calendar integration
     │   ├── todoist-task.ts # Todoist integration
     │   └── trpc/           # tRPC routers (integrations, widgets, generate)
-    └── drizzle/            # Database migrations
+    ├── testsprite_tests/   # TestSprite automated tests (API + UI)
+    ├── drizzle/            # Database migrations
+    └── README.md           # Server docs & test info
+
+demo.mp4                    # Demo video thumbnail
+README.md                   # This file
 ```
