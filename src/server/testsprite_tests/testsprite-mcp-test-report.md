@@ -1,170 +1,178 @@
-
-# TestSprite AI Testing Report(MCP) — Screenshot API & Preview Page (All Layouts & Variants)
+# TestSprite AI Testing Report (MCP)
 
 ---
 
-## 1️⃣ Document Metadata
-- **Project Name:** server (Peek)
+## 1. Document Metadata
+- **Project Name:** Peek Server
 - **Date:** 2026-03-15
-- **Prepared by:** TestSprite AI Team
-- **Tech Stack:** TypeScript, Next.js 16, Puppeteer, React 19
-- **Test Scope:** POST /api/screenshot (all 9 layouts, 45 variants) + /preview page rendering
-- **Server Mode:** Development
+- **Prepared by:** TestSprite AI Team + Claude
 
 ---
 
-## 2️⃣ Requirement Validation Summary
+## 2. Requirement Validation Summary
 
-### Requirement: Screenshot API — All Layouts & Variants (Backend)
-- **Description:** POST /api/screenshot with useMockData=true generates valid PNG images for every layout/variant combination.
+### Helper Functions (google-cal.ts & todoist-task.ts)
 
-#### Test SS001 contextual-hero — all 9 variants
-- **Test Visualization:** https://www.testsprite.com/dashboard/mcp/tests/af97285d-4ee4-4234-b398-a2a9afe4292b/965cdad4-e543-458e-90db-c8da593be1f8
-- **Status:** ✅ Passed
-- **Analysis:** All 9 variants (morning, urgent, night, focus, alert, calm, weather, energy, eink) return 200 with valid PNG.
+#### Test HLP001 normalizeRange valid date strings
+- **Test Code:** [HLP001_normalizeRange_valid_date_strings.py](./HLP001_normalizeRange_valid_date_strings.py)
+- **Test Visualization and Result:** https://www.testsprite.com/dashboard/mcp/tests/0f104a78-ccd7-4ba5-8df8-eb13fafddd53/0e6e80f3-af50-43af-8b17-f61e2e79bf93
+- **Status:** Passed
+- **Analysis:** Correctly parses valid ISO date strings and returns normalized ISO output.
 ---
 
-#### Test SS002 bento-box — all 6 variants
-- **Test Visualization:** https://www.testsprite.com/dashboard/mcp/tests/af97285d-4ee4-4234-b398-a2a9afe4292b/effd8d62-4b0d-4e62-be17-2a79bb0e9b2a
-- **Status:** ✅ Passed
-- **Analysis:** All 6 variants (frost, cream, charcoal, ocean, neon, eink) return 200 with valid PNG.
+#### Test HLP002 normalizeRange rejects invalid date strings
+- **Test Code:** [HLP002_normalizeRange_rejects_invalid_date_strings.py](./HLP002_normalizeRange_rejects_invalid_date_strings.py)
+- **Test Visualization and Result:** https://www.testsprite.com/dashboard/mcp/tests/0f104a78-ccd7-4ba5-8df8-eb13fafddd53/9ec025af-d644-4529-9267-e0ecbd49c784
+- **Status:** Passed
+- **Analysis:** Returns 400 with "Invalid time range" error for non-parseable date strings.
 ---
 
-#### Test SS003 timeline — all 5 variants
-- **Test Visualization:** https://www.testsprite.com/dashboard/mcp/tests/af97285d-4ee4-4234-b398-a2a9afe4292b/7a7af721-a8f0-4cb9-8b05-42fec24449a7
-- **Status:** ✅ Passed
-- **Analysis:** All 5 variants (light, dark, emerald, amber, eink) return 200 with valid PNG.
+#### Test HLP003 normalizeRange rejects from >= to
+- **Test Code:** [HLP003_normalizeRange_rejects_from__to.py](./HLP003_normalizeRange_rejects_from__to.py)
+- **Test Visualization and Result:** https://www.testsprite.com/dashboard/mcp/tests/0f104a78-ccd7-4ba5-8df8-eb13fafddd53/497101af-be14-43d2-a652-3db746613a99
+- **Status:** Passed
+- **Analysis:** Properly validates that `from` must be strictly before `to`.
 ---
 
-#### Test SS004 timeline-tasks — inline & pinned (4 variants)
-- **Test Visualization:** https://www.testsprite.com/dashboard/mcp/tests/af97285d-4ee4-4234-b398-a2a9afe4292b/dbf87de1-5598-4309-af3f-a65a3f07e1eb
-- **Status:** ✅ Passed
-- **Analysis:** All 4 variants (inline/light, inline/dark, pinned/light, pinned/dark) return 200 with valid PNG.
+#### Test HLP004 normalizeRange rejects equal dates
+- **Test Code:** [HLP004_normalizeRange_rejects_equal_dates.py](./HLP004_normalizeRange_rejects_equal_dates.py)
+- **Test Visualization and Result:** https://www.testsprite.com/dashboard/mcp/tests/0f104a78-ccd7-4ba5-8df8-eb13fafddd53/70514157-8098-47ff-a737-b37bef082946
+- **Status:** Passed
+- **Analysis:** Equal dates are rejected with appropriate error message.
 ---
 
-#### Test SS005 timeline-tasks — nested, floating, progress (6 variants)
-- **Test Visualization:** https://www.testsprite.com/dashboard/mcp/tests/af97285d-4ee4-4234-b398-a2a9afe4292b/0f4dcd84-4b5f-4ebf-a50e-a5f3c87b267a
-- **Status:** ✅ Passed
-- **Analysis:** All 6 variants (nested/light, nested/dark, floating/light, floating/dark, progress/light, progress/dark) return 200 with valid PNG.
+#### Test HLP005 resolveGoogleBoundary with dateTime returns timed event
+- **Test Code:** [HLP005_resolveGoogleBoundary_with_dateTime_returns_timed_event.py](./HLP005_resolveGoogleBoundary_with_dateTime_returns_timed_event.py)
+- **Test Visualization and Result:** https://www.testsprite.com/dashboard/mcp/tests/0f104a78-ccd7-4ba5-8df8-eb13fafddd53/c61d3c6c-8538-439a-9079-88ddbe871526
+- **Status:** Passed
+- **Analysis:** dateTime input correctly returns `isAllDay: false` with UTC-normalized ISO string.
 ---
 
-#### Test SS006 minimalist-stack — all 7 variants
-- **Test Visualization:** https://www.testsprite.com/dashboard/mcp/tests/af97285d-4ee4-4234-b398-a2a9afe4292b/b21d8f98-58ee-4b5b-bc3f-77a806f0bf6b
-- **Status:** ✅ Passed
-- **Analysis:** All 7 variants (light, dark, editorial, ink, brutal, neon, eink) return 200 with valid PNG.
+#### Test HLP006 resolveGoogleBoundary with date only returns all-day event
+- **Test Code:** [HLP006_resolveGoogleBoundary_with_date_only_returns_all_day_event.py](./HLP006_resolveGoogleBoundary_with_date_only_returns_all_day_event.py)
+- **Test Visualization and Result:** https://www.testsprite.com/dashboard/mcp/tests/0f104a78-ccd7-4ba5-8df8-eb13fafddd53/e28ab875-e431-4199-91b2-85c2d1128fd3
+- **Status:** Passed
+- **Analysis:** Date-only input returns `isAllDay: true` with midnight UTC ISO string.
 ---
 
-#### Test SS007 progress-ring — both variants
-- **Test Visualization:** https://www.testsprite.com/dashboard/mcp/tests/af97285d-4ee4-4234-b398-a2a9afe4292b/b1f73ba0-49dc-4c26-bba4-c792f27f36a2
-- **Status:** ✅ Passed
-- **Analysis:** Both variants (dark, light) return 200 with valid PNG.
+#### Test HLP007 resolveGoogleBoundary with null input returns null
+- **Test Code:** [HLP007_resolveGoogleBoundary_with_null_input_returns_null.py](./HLP007_resolveGoogleBoundary_with_null_input_returns_null.py)
+- **Test Visualization and Result:** https://www.testsprite.com/dashboard/mcp/tests/0f104a78-ccd7-4ba5-8df8-eb13fafddd53/f51bae34-31c6-4cab-acb4-c28e6394fb42
+- **Status:** Passed
+- **Analysis:** Null/undefined input gracefully returns null.
 ---
 
-#### Test SS008 companion-quote — both variants
-- **Test Visualization:** https://www.testsprite.com/dashboard/mcp/tests/af97285d-4ee4-4234-b398-a2a9afe4292b/2d9e8409-8a9c-4e5a-89d8-f838cf852703
-- **Status:** ✅ Passed
-- **Analysis:** Both variants (warm, frost) return 200 with valid PNG.
+#### Test HLP008 resolveGoogleBoundary with empty object returns null
+- **Test Code:** [HLP008_resolveGoogleBoundary_with_empty_object_returns_null.py](./HLP008_resolveGoogleBoundary_with_empty_object_returns_null.py)
+- **Test Visualization and Result:** https://www.testsprite.com/dashboard/mcp/tests/0f104a78-ccd7-4ba5-8df8-eb13fafddd53/997ce334-cc30-424c-a6a6-7358e4326f02
+- **Status:** Passed
+- **Analysis:** Object with null date and dateTime fields returns null.
 ---
 
-#### Test SS009 streak-flame — both variants
-- **Test Visualization:** https://www.testsprite.com/dashboard/mcp/tests/af97285d-4ee4-4234-b398-a2a9afe4292b/51ab36b5-36e4-4ec5-98d0-850f00e3066e
-- **Status:** ✅ Passed
-- **Analysis:** Both variants (fire, cool) return 200 with valid PNG.
+#### Test HLP009 resolveGoogleBoundary prefers dateTime over date
+- **Test Code:** [HLP009_resolveGoogleBoundary_prefers_dateTime_over_date.py](./HLP009_resolveGoogleBoundary_prefers_dateTime_over_date.py)
+- **Test Visualization and Result:** https://www.testsprite.com/dashboard/mcp/tests/0f104a78-ccd7-4ba5-8df8-eb13fafddd53/1bedadd0-86f3-4d17-9361-ed68847a829c
+- **Status:** Passed
+- **Analysis:** When both dateTime and date are provided, dateTime takes priority (isAllDay: false).
 ---
 
-#### Test SS010 daily-score — both variants
-- **Test Visualization:** https://www.testsprite.com/dashboard/mcp/tests/af97285d-4ee4-4234-b398-a2a9afe4292b/307597ac-6997-4f44-a149-269117b81150
-- **Status:** ✅ Passed
-- **Analysis:** Both variants (dark, light) return 200 with valid PNG.
+#### Test HLP010 resolveTodoistSchedule with due datetime
+- **Test Code:** [HLP010_resolveTodoistSchedule_with_due_datetime.py](./HLP010_resolveTodoistSchedule_with_due_datetime.py)
+- **Test Visualization and Result:** https://www.testsprite.com/dashboard/mcp/tests/0f104a78-ccd7-4ba5-8df8-eb13fafddd53/577ed04f-9291-4d54-a00e-f420aafe92c8
+- **Status:** Passed
+- **Analysis:** Due with datetime returns `kind: "due"`, `isAllDay: false`, correct ISO.
 ---
 
-### Requirement: Preview Page — Widget Gallery (Frontend)
-- **Description:** The /preview page renders all widget layouts and their variants as visible images.
-
-#### Test PV001 Contextual Hero section — 9 variants rendered
-- **Test Visualization:** https://www.testsprite.com/dashboard/mcp/tests/bf7a44e7-1967-4764-aa93-297a9aca181d/d56703ce-1960-4d33-898d-bcd842337bb6
-- **Status:** ✅ Passed
-- **Analysis:** All 9 Contextual Hero variant images render correctly on the preview page.
+#### Test HLP011 resolveTodoistSchedule with due date only (all-day)
+- **Test Code:** [HLP011_resolveTodoistSchedule_with_due_date_only_all_day.py](./HLP011_resolveTodoistSchedule_with_due_date_only_all_day.py)
+- **Test Visualization and Result:** https://www.testsprite.com/dashboard/mcp/tests/0f104a78-ccd7-4ba5-8df8-eb13fafddd53/c8d0fca6-7d38-43fd-b8c2-65e52853b222
+- **Status:** Passed
+- **Analysis:** Due with date-only returns `kind: "due"`, `isAllDay: true`, midnight UTC.
 ---
 
-#### Test PV002 Bento Box section — 6 variants rendered
-- **Test Visualization:** https://www.testsprite.com/dashboard/mcp/tests/bf7a44e7-1967-4764-aa93-297a9aca181d/4eeb2bc4-db45-4eb9-a641-0307b5ac56bb
-- **Status:** ✅ Passed
-- **Analysis:** All 6 Bento Box variant images render correctly.
+#### Test HLP012 resolveTodoistSchedule with deadline only
+- **Test Code:** [HLP012_resolveTodoistSchedule_with_deadline_only.py](./HLP012_resolveTodoistSchedule_with_deadline_only.py)
+- **Test Visualization and Result:** https://www.testsprite.com/dashboard/mcp/tests/0f104a78-ccd7-4ba5-8df8-eb13fafddd53/bdf062a1-af6d-4a28-a6d2-4a7831d8c4d0
+- **Status:** Passed
+- **Analysis:** Deadline-only returns `kind: "deadline"`, `isAllDay: true`.
 ---
 
-#### Test PV003 Timeline section — 5 variants rendered
-- **Test Visualization:** https://www.testsprite.com/dashboard/mcp/tests/bf7a44e7-1967-4764-aa93-297a9aca181d/5c6221d7-d032-4543-b4ce-1eb3cb362063
-- **Status:** ❌ Failed
-- **Severity:** LOW
-- **Analysis:** Found 5 img elements in the Timeline section but `img.complete`/`img.naturalWidth` checks failed. This is a **timing issue in dev mode** — the Puppeteer-based screenshot API is slow on a single-threaded dev server, so images hadn't finished loading when the test ran. The backend tests (SS003) confirm all 5 Timeline variants generate valid PNGs. Not an application bug.
+#### Test HLP013 resolveTodoistSchedule with no due or deadline returns null
+- **Test Code:** [HLP013_resolveTodoistSchedule_with_no_due_or_deadline_returns_null.py](./HLP013_resolveTodoistSchedule_with_no_due_or_deadline_returns_null.py)
+- **Test Visualization and Result:** https://www.testsprite.com/dashboard/mcp/tests/0f104a78-ccd7-4ba5-8df8-eb13fafddd53/d43e0392-4105-41e5-a4f1-8ef19763fd26
+- **Status:** Passed
+- **Analysis:** No schedule info returns null correctly.
 ---
 
-#### Test PV004 Timeline + Tasks — all 5 sub-variant sections
-- **Test Visualization:** https://www.testsprite.com/dashboard/mcp/tests/bf7a44e7-1967-4764-aa93-297a9aca181d/21d3b242-1bcf-4790-a486-33e6607db74f
-- **Status:** ✅ Passed
-- **Analysis:** All 5 sub-variant sections (Inline, Pinned, Nested, Floating, Progress) are present with their variant images.
+#### Test HLP014 resolveTodoistSchedule prefers due datetime over deadline
+- **Test Code:** [HLP014_resolveTodoistSchedule_prefers_due_datetime_over_deadline.py](./HLP014_resolveTodoistSchedule_prefers_due_datetime_over_deadline.py)
+- **Test Visualization and Result:** https://www.testsprite.com/dashboard/mcp/tests/0f104a78-ccd7-4ba5-8df8-eb13fafddd53/5c7283bd-ca65-49b6-b3e5-56932e834f07
+- **Status:** Passed
+- **Analysis:** When both due (with datetime) and deadline exist, due takes priority.
 ---
 
-#### Test PV005 Minimalist Stack section — 7 variants rendered
-- **Test Visualization:** https://www.testsprite.com/dashboard/mcp/tests/bf7a44e7-1967-4764-aa93-297a9aca181d/036b1f9c-f8a0-4a53-805f-7a92dfe48b1f
-- **Status:** ✅ Passed
-- **Analysis:** All 7 Minimalist Stack variant images render correctly.
+#### Test HLP015 isTodoistTaskInRange task within range returns true
+- **Test Code:** [HLP015_isTodoistTaskInRange_task_within_range_returns_true.py](./HLP015_isTodoistTaskInRange_task_within_range_returns_true.py)
+- **Test Visualization and Result:** https://www.testsprite.com/dashboard/mcp/tests/0f104a78-ccd7-4ba5-8df8-eb13fafddd53/52def695-fb8c-4b73-9a8e-b57053d01501
+- **Status:** Passed
+- **Analysis:** Task with datetime inside [from, to] correctly returns true.
 ---
 
-#### Test PV006 Progress Ring, Companion Quote, Streak Flame, Daily Score sections
-- **Test Visualization:** https://www.testsprite.com/dashboard/mcp/tests/bf7a44e7-1967-4764-aa93-297a9aca181d/a7eb02f6-0839-4ba6-a1cf-e575bd962163
-- **Status:** ✅ Passed
-- **Analysis:** All 4 remaining layout sections render with correct variant counts (2 each).
+#### Test HLP016 isTodoistTaskInRange task outside range returns false
+- **Test Code:** [HLP016_isTodoistTaskInRange_task_outside_range_returns_false.py](./HLP016_isTodoistTaskInRange_task_outside_range_returns_false.py)
+- **Test Visualization and Result:** https://www.testsprite.com/dashboard/mcp/tests/0f104a78-ccd7-4ba5-8df8-eb13fafddd53/79dc91c8-6e66-4d27-8a04-8580edb9e029
+- **Status:** Passed
+- **Analysis:** Task outside range correctly returns false.
 ---
 
-#### Test PV007 Total widget count — expected 45 variants
-- **Test Visualization:** https://www.testsprite.com/dashboard/mcp/tests/bf7a44e7-1967-4764-aa93-297a9aca181d/ee7bbc9a-b5e2-46ab-b3b0-41e03c34ec19
-- **Status:** ❌ Failed
-- **Severity:** LOW
-- **Analysis:** Only found 12 of 45 expected images loaded. Many images showed as placeholders/spinners because the dev server was still rendering screenshots via Puppeteer. This is a **dev server performance limitation** — the single-threaded Next.js dev server cannot handle 45 concurrent Puppeteer screenshot requests. In production mode, this would pass. The backend tests (SS001-SS010) confirm all 45 variants generate valid PNGs.
+#### Test HLP017 isTodoistTaskInRange undated task excluded when includeUndated false
+- **Test Code:** [HLP017_isTodoistTaskInRange_undated_task_excluded_when_includeUndated_false.py](./HLP017_isTodoistTaskInRange_undated_task_excluded_when_includeUndated_false.py)
+- **Test Visualization and Result:** https://www.testsprite.com/dashboard/mcp/tests/0f104a78-ccd7-4ba5-8df8-eb13fafddd53/0e62f755-aa88-43df-bb4c-ab54b8037ce8
+- **Status:** Passed
+- **Analysis:** Undated task correctly excluded when includeUndated is false.
 ---
 
-## 3️⃣ Coverage & Matching Metrics
+#### Test HLP018 isTodoistTaskInRange undated task included when includeUndated true
+- **Test Code:** [HLP018_isTodoistTaskInRange_undated_task_included_when_includeUndated_true.py](./HLP018_isTodoistTaskInRange_undated_task_included_when_includeUndated_true.py)
+- **Test Visualization and Result:** https://www.testsprite.com/dashboard/mcp/tests/0f104a78-ccd7-4ba5-8df8-eb13fafddd53/21d0ec53-ecb6-4575-a448-0a14e20d9586
+- **Status:** Passed
+- **Analysis:** Undated task correctly included when includeUndated is true.
+---
 
-### Backend: Screenshot API
-- **100%** passed (10 out of 10) — **All 45 layout/variant combinations generate valid PNGs**
+#### Test HLP019 isTodoistTaskInRange task at range boundary (exact from) returns true
+- **Test Code:** [HLP019_isTodoistTaskInRange_task_at_range_boundary_exact_from_returns_true.py](./HLP019_isTodoistTaskInRange_task_at_range_boundary_exact_from_returns_true.py)
+- **Test Visualization and Result:** https://www.testsprite.com/dashboard/mcp/tests/0f104a78-ccd7-4ba5-8df8-eb13fafddd53/81dac0ce-fdd1-4a3a-adfc-92883a7ef2d5
+- **Status:** Passed
+- **Analysis:** Boundary-inclusive check confirmed: task at exact `from` timestamp returns true.
+---
 
-| Layout | Variants | Status |
-|---|---|---|
-| contextual-hero | 9 (morning, urgent, night, focus, alert, calm, weather, energy, eink) | ✅ |
-| bento-box | 6 (frost, cream, charcoal, ocean, neon, eink) | ✅ |
-| timeline | 5 (light, dark, emerald, amber, eink) | ✅ |
-| timeline-tasks | 10 (inline, pinned, nested, floating, progress × light/dark) | ✅ |
-| minimalist-stack | 7 (light, dark, editorial, ink, brutal, neon, eink) | ✅ |
-| progress-ring | 2 (dark, light) | ✅ |
-| companion-quote | 2 (warm, frost) | ✅ |
-| streak-flame | 2 (fire, cool) | ✅ |
-| daily-score | 2 (dark, light) | ✅ |
+#### Test HLP020 unknown function returns error
+- **Test Code:** [HLP020_unknown_function_returns_error.py](./HLP020_unknown_function_returns_error.py)
+- **Test Visualization and Result:** https://www.testsprite.com/dashboard/mcp/tests/0f104a78-ccd7-4ba5-8df8-eb13fafddd53/8c0b60a4-8e04-447f-a081-94ce85d61133
+- **Status:** Passed
+- **Analysis:** Unknown function name correctly returns 400 with "Unknown function" error.
+---
 
-### Frontend: Preview Page
-- **71.4%** passed (5 out of 7) — 2 failures due to dev server image loading timing
 
-| Requirement | Total Tests | ✅ Passed | ❌ Failed |
+## 3. Coverage & Matching Metrics
+
+- **100%** of tests passed (20/20)
+
+| Function | Total Tests | Passed | Failed |
 |---|---|---|---|
-| Backend: Screenshot API (all variants) | 10 | 10 | 0 |
-| Frontend: Preview Page rendering | 7 | 5 | 2 |
-| **Total** | **17** | **15** | **2** |
+| normalizeRange | 4 | 4 | 0 |
+| resolveGoogleBoundary | 5 | 5 | 0 |
+| resolveTodoistSchedule | 5 | 5 | 0 |
+| isTodoistTaskInRange | 5 | 5 | 0 |
+| Error handling | 1 | 1 | 0 |
+| **Total** | **20** | **20** | **0** |
 
 ---
 
-## 4️⃣ Key Gaps / Risks
+## 4. Key Gaps / Risks
 
-> **Backend: 100% pass rate** — All 45 screenshot variants confirmed working.
-> **Frontend: 71.4% pass rate** — 2 failures are timing issues, not bugs.
+- Helper functions were tested via a dev-only `/api/test-helpers` route (not available in production). Consider removing this endpoint before deploying or ensuring `NODE_ENV` gating is reliable.
+- Edge cases like timezone-sensitive date parsing (e.g., DST transitions) were not covered in this test suite.
+- The `to` boundary of `isTodoistTaskInRange` uses `<=` (inclusive) -- a task at exact `to` timestamp would also return true. Verify this is intended behavior.
 
-### Root Cause of Frontend Failures
-Both PV003 and PV007 failed because the dev server couldn't render all 45 Puppeteer screenshots fast enough. The single-threaded Next.js dev server gets overwhelmed by concurrent screenshot requests. The images exist but hadn't finished loading when the tests checked.
-
-**Evidence:** The backend tests (SS001-SS010) prove all 45 variants generate valid PNGs when tested individually.
-
-### Recommendations
-1. **Run in production mode** (`npm run build && npm run start`) for frontend preview tests — the multi-process production server handles concurrent requests much better.
-2. **Add loading states:** Consider adding a loading indicator or skeleton to the preview page while screenshots render.
-3. **Lazy loading:** Consider implementing intersection observer-based lazy loading so only visible sections trigger screenshot rendering.
 ---

@@ -1,52 +1,102 @@
 [
   {
-    "id": "SS001",
-    "title": "POST /api/screenshot contextual-hero all 9 variants with mock data",
-    "description": "Test POST /api/screenshot for the contextual-hero layout with useMockData=true for all 9 variants. Send 9 sequential requests with JSON body {width: 400, height: 400, layout: 'contextual-hero', variant: VARIANT, useMockData: true} where VARIANT is each of: 'morning', 'urgent', 'night', 'focus', 'alert', 'calm', 'weather', 'energy', 'eink'. For each request verify status 200 and content-type header contains 'image/png'. Verify the response body is non-empty (length > 100 bytes) confirming a real PNG was generated."
+    "id": "HLP001",
+    "title": "normalizeRange valid date strings",
+    "description": "POST /api/test-helpers with JSON body {fn: 'normalizeRange', args: {from: '2026-03-15T00:00:00Z', to: '2026-03-16T00:00:00Z'}}. Verify status 200. The response JSON should have result.from and result.to as valid ISO date strings. Verify result.from equals '2026-03-15T00:00:00.000Z' and result.to equals '2026-03-16T00:00:00.000Z'."
   },
   {
-    "id": "SS002",
-    "title": "POST /api/screenshot bento-box all 6 variants with mock data",
-    "description": "Test POST /api/screenshot for the bento-box layout with useMockData=true for all 6 variants. Send 6 sequential requests with JSON body {width: 400, height: 200, layout: 'bento-box', variant: VARIANT, useMockData: true} where VARIANT is each of: 'frost', 'cream', 'charcoal', 'ocean', 'neon', 'eink'. For each request verify status 200, content-type contains 'image/png', and response body length > 100 bytes."
+    "id": "HLP002",
+    "title": "normalizeRange rejects invalid date strings",
+    "description": "POST /api/test-helpers with JSON body {fn: 'normalizeRange', args: {from: 'not-a-date', to: '2026-03-16T00:00:00Z'}}. Verify status 400. The response JSON should have error field containing 'Invalid time range'."
   },
   {
-    "id": "SS003",
-    "title": "POST /api/screenshot timeline all 5 variants with mock data",
-    "description": "Test POST /api/screenshot for the timeline layout with useMockData=true for all 5 variants. Send 5 sequential requests with JSON body {width: 400, height: 400, layout: 'timeline', variant: VARIANT, useMockData: true} where VARIANT is each of: 'light', 'dark', 'emerald', 'amber', 'eink'. For each request verify status 200, content-type contains 'image/png', and response body length > 100 bytes."
+    "id": "HLP003",
+    "title": "normalizeRange rejects from >= to",
+    "description": "POST /api/test-helpers with JSON body {fn: 'normalizeRange', args: {from: '2026-03-16T00:00:00Z', to: '2026-03-15T00:00:00Z'}}. Verify status 400. The response JSON error should contain 'from' and 'before'."
   },
   {
-    "id": "SS004",
-    "title": "POST /api/screenshot timeline-tasks inline and pinned variants with mock data",
-    "description": "Test POST /api/screenshot for timeline-tasks layout with useMockData=true. For timeline-tasks, the variant format is 'subVariant/theme'. Send 4 sequential requests with JSON body {width: 400, height: 400, layout: 'timeline-tasks', variant: VARIANT, useMockData: true} where VARIANT is each of: 'inline/light', 'inline/dark', 'pinned/light', 'pinned/dark'. For each request verify status 200, content-type contains 'image/png', and response body length > 100 bytes."
+    "id": "HLP004",
+    "title": "normalizeRange rejects equal dates",
+    "description": "POST /api/test-helpers with JSON body {fn: 'normalizeRange', args: {from: '2026-03-15T00:00:00Z', to: '2026-03-15T00:00:00Z'}}. Verify status 400. The response JSON error should contain 'before'."
   },
   {
-    "id": "SS005",
-    "title": "POST /api/screenshot timeline-tasks nested floating progress variants with mock data",
-    "description": "Test POST /api/screenshot for timeline-tasks layout with useMockData=true. Send 6 sequential requests with JSON body {width: 400, height: 400, layout: 'timeline-tasks', variant: VARIANT, useMockData: true} where VARIANT is each of: 'nested/light', 'nested/dark', 'floating/light', 'floating/dark', 'progress/light', 'progress/dark'. For each request verify status 200, content-type contains 'image/png', and response body length > 100 bytes."
+    "id": "HLP005",
+    "title": "resolveGoogleBoundary with dateTime returns timed event",
+    "description": "POST /api/test-helpers with JSON body {fn: 'resolveGoogleBoundary', args: {dateTime: '2026-03-15T14:30:00-07:00', date: null}}. Verify status 200. Response result should have isAllDay equal to false and iso should be a valid ISO string representing the same moment in UTC."
   },
   {
-    "id": "SS006",
-    "title": "POST /api/screenshot minimalist-stack all 7 variants with mock data",
-    "description": "Test POST /api/screenshot for the minimalist-stack layout with useMockData=true for all 7 variants. Send 7 sequential requests with JSON body {width: 400, height: 200, layout: 'minimalist-stack', variant: VARIANT, useMockData: true} where VARIANT is each of: 'light', 'dark', 'editorial', 'ink', 'brutal', 'neon', 'eink'. For each request verify status 200, content-type contains 'image/png', and response body length > 100 bytes."
+    "id": "HLP006",
+    "title": "resolveGoogleBoundary with date only returns all-day event",
+    "description": "POST /api/test-helpers with JSON body {fn: 'resolveGoogleBoundary', args: {date: '2026-03-15', dateTime: null}}. Verify status 200. Response result should have isAllDay equal to true and iso equal to '2026-03-15T00:00:00.000Z'."
   },
   {
-    "id": "SS007",
-    "title": "POST /api/screenshot progress-ring both variants with mock data",
-    "description": "Test POST /api/screenshot for the progress-ring layout with useMockData=true for both variants. Send 2 sequential requests with JSON body {width: 400, height: 400, layout: 'progress-ring', variant: VARIANT, useMockData: true} where VARIANT is each of: 'dark', 'light'. For each request verify status 200, content-type contains 'image/png', and response body length > 100 bytes."
+    "id": "HLP007",
+    "title": "resolveGoogleBoundary with null input returns null",
+    "description": "POST /api/test-helpers with JSON body {fn: 'resolveGoogleBoundary', args: null}. Verify status 200. Response result should be null."
   },
   {
-    "id": "SS008",
-    "title": "POST /api/screenshot companion-quote both variants with mock data",
-    "description": "Test POST /api/screenshot for the companion-quote layout with useMockData=true for both variants. Send 2 sequential requests with JSON body {width: 400, height: 200, layout: 'companion-quote', variant: VARIANT, useMockData: true} where VARIANT is each of: 'warm', 'frost'. For each request verify status 200, content-type contains 'image/png', and response body length > 100 bytes."
+    "id": "HLP008",
+    "title": "resolveGoogleBoundary with empty object returns null",
+    "description": "POST /api/test-helpers with JSON body {fn: 'resolveGoogleBoundary', args: {date: null, dateTime: null}}. Verify status 200. Response result should be null."
   },
   {
-    "id": "SS009",
-    "title": "POST /api/screenshot streak-flame both variants with mock data",
-    "description": "Test POST /api/screenshot for the streak-flame layout with useMockData=true for both variants. Send 2 sequential requests with JSON body {width: 400, height: 400, layout: 'streak-flame', variant: VARIANT, useMockData: true} where VARIANT is each of: 'fire', 'cool'. For each request verify status 200, content-type contains 'image/png', and response body length > 100 bytes."
+    "id": "HLP009",
+    "title": "resolveGoogleBoundary prefers dateTime over date",
+    "description": "POST /api/test-helpers with JSON body {fn: 'resolveGoogleBoundary', args: {dateTime: '2026-03-15T10:00:00Z', date: '2026-03-15'}}. Verify status 200. Response result should have isAllDay equal to false (dateTime takes priority) and iso equal to '2026-03-15T10:00:00.000Z'."
   },
   {
-    "id": "SS010",
-    "title": "POST /api/screenshot daily-score both variants with mock data",
-    "description": "Test POST /api/screenshot for the daily-score layout with useMockData=true for both variants. Send 2 sequential requests with JSON body {width: 400, height: 200, layout: 'daily-score', variant: VARIANT, useMockData: true} where VARIANT is each of: 'dark', 'light'. For each request verify status 200, content-type contains 'image/png', and response body length > 100 bytes."
+    "id": "HLP010",
+    "title": "resolveTodoistSchedule with due datetime",
+    "description": "POST /api/test-helpers with JSON body {fn: 'resolveTodoistSchedule', args: {due: {date: '2026-03-15', datetime: '2026-03-15T14:00:00Z'}, deadline: null}}. Verify status 200. Response result should have kind equal to 'due', isAllDay equal to false, and iso equal to '2026-03-15T14:00:00.000Z'."
+  },
+  {
+    "id": "HLP011",
+    "title": "resolveTodoistSchedule with due date only (all-day)",
+    "description": "POST /api/test-helpers with JSON body {fn: 'resolveTodoistSchedule', args: {due: {date: '2026-03-15', datetime: null}, deadline: null}}. Verify status 200. Response result should have kind equal to 'due', isAllDay equal to true, and iso equal to '2026-03-15T00:00:00.000Z'."
+  },
+  {
+    "id": "HLP012",
+    "title": "resolveTodoistSchedule with deadline only",
+    "description": "POST /api/test-helpers with JSON body {fn: 'resolveTodoistSchedule', args: {due: null, deadline: {date: '2026-03-20'}}}. Verify status 200. Response result should have kind equal to 'deadline', isAllDay equal to true, and iso equal to '2026-03-20T00:00:00.000Z'."
+  },
+  {
+    "id": "HLP013",
+    "title": "resolveTodoistSchedule with no due or deadline returns null",
+    "description": "POST /api/test-helpers with JSON body {fn: 'resolveTodoistSchedule', args: {due: null, deadline: null}}. Verify status 200. Response result should be null."
+  },
+  {
+    "id": "HLP014",
+    "title": "resolveTodoistSchedule prefers due datetime over deadline",
+    "description": "POST /api/test-helpers with JSON body {fn: 'resolveTodoistSchedule', args: {due: {date: '2026-03-15', datetime: '2026-03-15T09:00:00Z'}, deadline: {date: '2026-03-20'}}}. Verify status 200. Response result should have kind equal to 'due' (not 'deadline'), isAllDay false, and iso equal to '2026-03-15T09:00:00.000Z'."
+  },
+  {
+    "id": "HLP015",
+    "title": "isTodoistTaskInRange task within range returns true",
+    "description": "POST /api/test-helpers with JSON body {fn: 'isTodoistTaskInRange', args: {task: {due: {date: '2026-03-15', datetime: '2026-03-15T10:00:00Z'}, deadline: null}, range: {from: '2026-03-15T00:00:00Z', to: '2026-03-16T00:00:00Z'}, includeUndated: false}}. Verify status 200. Response result should be true."
+  },
+  {
+    "id": "HLP016",
+    "title": "isTodoistTaskInRange task outside range returns false",
+    "description": "POST /api/test-helpers with JSON body {fn: 'isTodoistTaskInRange', args: {task: {due: {date: '2026-03-20', datetime: '2026-03-20T10:00:00Z'}, deadline: null}, range: {from: '2026-03-15T00:00:00Z', to: '2026-03-16T00:00:00Z'}, includeUndated: false}}. Verify status 200. Response result should be false."
+  },
+  {
+    "id": "HLP017",
+    "title": "isTodoistTaskInRange undated task excluded when includeUndated false",
+    "description": "POST /api/test-helpers with JSON body {fn: 'isTodoistTaskInRange', args: {task: {due: null, deadline: null}, range: {from: '2026-03-15T00:00:00Z', to: '2026-03-16T00:00:00Z'}, includeUndated: false}}. Verify status 200. Response result should be false."
+  },
+  {
+    "id": "HLP018",
+    "title": "isTodoistTaskInRange undated task included when includeUndated true",
+    "description": "POST /api/test-helpers with JSON body {fn: 'isTodoistTaskInRange', args: {task: {due: null, deadline: null}, range: {from: '2026-03-15T00:00:00Z', to: '2026-03-16T00:00:00Z'}, includeUndated: true}}. Verify status 200. Response result should be true."
+  },
+  {
+    "id": "HLP019",
+    "title": "isTodoistTaskInRange task at range boundary (exact from) returns true",
+    "description": "POST /api/test-helpers with JSON body {fn: 'isTodoistTaskInRange', args: {task: {due: {date: '2026-03-15', datetime: '2026-03-15T00:00:00Z'}, deadline: null}, range: {from: '2026-03-15T00:00:00Z', to: '2026-03-16T00:00:00Z'}, includeUndated: false}}. Verify status 200. Response result should be true (boundary inclusive)."
+  },
+  {
+    "id": "HLP020",
+    "title": "unknown function returns error",
+    "description": "POST /api/test-helpers with JSON body {fn: 'nonExistentFunction', args: {}}. Verify status 400. Response error should contain 'Unknown function'."
   }
 ]
