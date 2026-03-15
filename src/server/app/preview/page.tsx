@@ -1,3 +1,4 @@
+import { SaveAllButton } from "./SaveAllButton";
 import { WidgetImage } from "./WidgetImage";
 
 export interface WidgetEntry {
@@ -161,17 +162,24 @@ const SECTIONS: { title: string; widgets: WidgetEntry[] }[] = [
   },
 ];
 
+const ALL_WIDGETS = SECTIONS.flatMap((s) => s.widgets);
+
 export default function PreviewPage() {
   return (
     <div className="min-h-screen bg-[#08080a] px-6 py-16 text-[#eae8e3]">
       <div className="mx-auto max-w-350">
-        <h1 className="mb-2 font-serif text-4xl font-bold tracking-tight">
-          Widget Screenshot Preview
-        </h1>
-        <p className="mb-16 text-sm text-zinc-500">
-          Every layout, every variant — rendered via POST /api/screenshot with
-          mock data from widget-variants.html
-        </p>
+        <div className="mb-16 flex items-start justify-between">
+          <div>
+            <h1 className="mb-2 font-serif text-4xl font-bold tracking-tight">
+              Widget Screenshot Preview
+            </h1>
+            <p className="text-sm text-zinc-500">
+              Every layout, every variant — rendered via POST /api/screenshot
+              with mock data from widget-variants.html
+            </p>
+          </div>
+          <SaveAllButton widgets={ALL_WIDGETS} />
+        </div>
         <PreviewGrid />
       </div>
     </div>
