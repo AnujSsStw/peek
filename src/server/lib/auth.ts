@@ -101,6 +101,7 @@ export function initAuth<
       enabled: true,
     },
     trustedOrigins: [
+      "app://",
       "peek://",
       "exp://",
       "https://*.exp.direct",
