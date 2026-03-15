@@ -1,5 +1,3 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
-
 ## Getting Started
 
 First, run the development server:
@@ -16,21 +14,30 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Testing
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+This project uses [TestSprite](https://www.testsprite.com) for automated API and UI testing via its MCP integration.
 
-## Learn More
+### Test Suites
 
-To learn more about Next.js, take a look at the following resources:
+| Suite                  | Type     | Tests | What it covers                                                                              |
+| ---------------------- | -------- | ----- | ------------------------------------------------------------------------------------------- |
+| Screenshot API (SS)    | Backend  | 10    | All 9 layouts, 45 variants via `POST /api/screenshot` with mock data                        |
+| Preview Page (PV)      | Frontend | 7     | `/preview` widget gallery rendering                                                         |
+| Helper Functions (HLP) | Backend  | 20    | `normalizeRange`, `resolveGoogleBoundary`, `resolveTodoistSchedule`, `isTodoistTaskInRange` |
+| OAuth Login UI (OA)    | Frontend | 8     | `/get-started` OAuth buttons, email form, sign-up toggle, redirect initiation               |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Running Tests
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Start the server (`npm run dev` or `npm run build && npm start` for production mode)
+2. Test plans live in `testsprite_tests/testsprite_backend_test_plan.json` and `testsprite_tests/testsprite_frontend_test_plan.json`
+3. Run tests through the TestSprite MCP tool — results are written to `testsprite_tests/testsprite-mcp-test-report.md`
 
-## Deploy on Vercel
+### Test Helpers Endpoint
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+A dev-only `POST /api/test-helpers` endpoint exposes pure utility functions for backend unit testing. It accepts `{fn, args}` and returns `{result}`. Blocked in production via `NODE_ENV` check.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Notes
+
+- Frontend preview tests work best in **production mode** — the dev server struggles with concurrent Puppeteer screenshot requests.
+- OAuth flows can only be tested up to redirect initiation since they require real Google/Todoist credentials.
