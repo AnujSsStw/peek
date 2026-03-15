@@ -12,150 +12,85 @@
 
 ## 2️⃣ Requirement Validation Summary
 
-#### Test HLP001 normalizeRange valid date strings
-- **Test Code:** [HLP001_normalizeRange_valid_date_strings.py](./HLP001_normalizeRange_valid_date_strings.py)
-- **Test Visualization and Result:** https://www.testsprite.com/dashboard/mcp/tests/0f104a78-ccd7-4ba5-8df8-eb13fafddd53/0e6e80f3-af50-43af-8b17-f61e2e79bf93
+#### Test OA001 Get-started page renders login step with Google OAuth button
+- **Test Code:** [OA001_Get_started_page_renders_login_step_with_Google_OAuth_button.py](./OA001_Get_started_page_renders_login_step_with_Google_OAuth_button.py)
+- **Test Visualization and Result:** https://www.testsprite.com/dashboard/mcp/tests/d4087612-700e-4787-bdea-ca5c33168d7b/568c8899-4835-4a35-8981-884c7a6631e9
 - **Status:** ✅ Passed
 - **Analysis / Findings:** {{TODO:AI_ANALYSIS}}.
 ---
 
-#### Test HLP002 normalizeRange rejects invalid date strings
-- **Test Code:** [HLP002_normalizeRange_rejects_invalid_date_strings.py](./HLP002_normalizeRange_rejects_invalid_date_strings.py)
-- **Test Visualization and Result:** https://www.testsprite.com/dashboard/mcp/tests/0f104a78-ccd7-4ba5-8df8-eb13fafddd53/9ec025af-d644-4529-9267-e0ecbd49c784
+#### Test OA002 Get-started page renders email/password sign-in form
+- **Test Code:** [OA002_Get_started_page_renders_emailpassword_sign_in_form.py](./OA002_Get_started_page_renders_emailpassword_sign_in_form.py)
+- **Test Visualization and Result:** https://www.testsprite.com/dashboard/mcp/tests/d4087612-700e-4787-bdea-ca5c33168d7b/b0c4713a-ab2b-402c-b540-f0e9b1913181
 - **Status:** ✅ Passed
 - **Analysis / Findings:** {{TODO:AI_ANALYSIS}}.
 ---
 
-#### Test HLP003 normalizeRange rejects from >= to
-- **Test Code:** [HLP003_normalizeRange_rejects_from__to.py](./HLP003_normalizeRange_rejects_from__to.py)
-- **Test Visualization and Result:** https://www.testsprite.com/dashboard/mcp/tests/0f104a78-ccd7-4ba5-8df8-eb13fafddd53/497101af-be14-43d2-a652-3db746613a99
+#### Test OA003 Google OAuth button initiates redirect on click
+- **Test Code:** [OA003_Google_OAuth_button_initiates_redirect_on_click.py](./OA003_Google_OAuth_button_initiates_redirect_on_click.py)
+- **Test Visualization and Result:** https://www.testsprite.com/dashboard/mcp/tests/d4087612-700e-4787-bdea-ca5c33168d7b/53f05894-c4d6-4871-9690-bafdd7f1c74b
 - **Status:** ✅ Passed
 - **Analysis / Findings:** {{TODO:AI_ANALYSIS}}.
 ---
 
-#### Test HLP004 normalizeRange rejects equal dates
-- **Test Code:** [HLP004_normalizeRange_rejects_equal_dates.py](./HLP004_normalizeRange_rejects_equal_dates.py)
-- **Test Visualization and Result:** https://www.testsprite.com/dashboard/mcp/tests/0f104a78-ccd7-4ba5-8df8-eb13fafddd53/70514157-8098-47ff-a737-b37bef082946
+#### Test OA004 Sign-up mode toggle works and shows name field
+- **Test Code:** [OA004_Sign_up_mode_toggle_works_and_shows_name_field.py](./OA004_Sign_up_mode_toggle_works_and_shows_name_field.py)
+- **Test Visualization and Result:** https://www.testsprite.com/dashboard/mcp/tests/d4087612-700e-4787-bdea-ca5c33168d7b/ffeaeede-1f52-460a-ab8b-d60b8a9a4023
 - **Status:** ✅ Passed
 - **Analysis / Findings:** {{TODO:AI_ANALYSIS}}.
 ---
 
-#### Test HLP005 resolveGoogleBoundary with dateTime returns timed event
-- **Test Code:** [HLP005_resolveGoogleBoundary_with_dateTime_returns_timed_event.py](./HLP005_resolveGoogleBoundary_with_dateTime_returns_timed_event.py)
-- **Test Visualization and Result:** https://www.testsprite.com/dashboard/mcp/tests/0f104a78-ccd7-4ba5-8df8-eb13fafddd53/c61d3c6c-8538-439a-9079-88ddbe871526
+#### Test OA005 Email sign-in with valid test account proceeds to next step
+- **Test Code:** [OA005_Email_sign_in_with_valid_test_account_proceeds_to_next_step.py](./OA005_Email_sign_in_with_valid_test_account_proceeds_to_next_step.py)
+- **Test Error:** TEST FAILURE
+
+ASSERTIONS:
+- Sign-in failed - 'Invalid email or password' error displayed after submitting valid test credentials.
+- Connect step not reached - the page remains on the sign-in form and does not show a 'Connect' heading or integrations such as 'Google Calendar' or 'Todoist'.
+- Expected redirect to Step 2 within 5 seconds did not occur; the onboarding did not progress after sign-in.
+- **Test Visualization and Result:** https://www.testsprite.com/dashboard/mcp/tests/d4087612-700e-4787-bdea-ca5c33168d7b/37f51658-b5c7-49e9-a1e3-eb20223708ff
+- **Status:** ❌ Failed
+- **Analysis / Findings:** {{TODO:AI_ANALYSIS}}.
+---
+
+#### Test OA006 Connect step shows Google Calendar and Todoist OAuth providers
+- **Test Code:** [OA006_Connect_step_shows_Google_Calendar_and_Todoist_OAuth_providers.py](./OA006_Connect_step_shows_Google_Calendar_and_Todoist_OAuth_providers.py)
+- **Test Error:** TEST FAILURE
+
+ASSERTIONS:
+- Sign-in did not complete: after submitting credentials the page remained on the Sign In step (no navigation to the Connect step).
+- Connect step not visible: no 'Google Calendar' provider option displayed on the page after authentication attempt.
+- Connect step not visible: no 'Todoist' provider option displayed on the page after authentication attempt.
+- No 'Skip' or 'Next' button present to bypass the connect step on the current page.
+- **Test Visualization and Result:** https://www.testsprite.com/dashboard/mcp/tests/d4087612-700e-4787-bdea-ca5c33168d7b/bce42cb7-0c3b-48c8-a586-c1f2b399ad9c
+- **Status:** ❌ Failed
+- **Analysis / Findings:** {{TODO:AI_ANALYSIS}}.
+---
+
+#### Test OA007 Google Calendar connect button initiates OAuth redirect
+- **Test Code:** [OA007_Google_Calendar_connect_button_initiates_OAuth_redirect.py](./OA007_Google_Calendar_connect_button_initiates_OAuth_redirect.py)
+- **Test Visualization and Result:** https://www.testsprite.com/dashboard/mcp/tests/d4087612-700e-4787-bdea-ca5c33168d7b/5820ad21-7c1f-4dce-9d2f-7c4f8d1f105b
 - **Status:** ✅ Passed
 - **Analysis / Findings:** {{TODO:AI_ANALYSIS}}.
 ---
 
-#### Test HLP006 resolveGoogleBoundary with date only returns all-day event
-- **Test Code:** [HLP006_resolveGoogleBoundary_with_date_only_returns_all_day_event.py](./HLP006_resolveGoogleBoundary_with_date_only_returns_all_day_event.py)
-- **Test Visualization and Result:** https://www.testsprite.com/dashboard/mcp/tests/0f104a78-ccd7-4ba5-8df8-eb13fafddd53/e28ab875-e431-4199-91b2-85c2d1128fd3
-- **Status:** ✅ Passed
-- **Analysis / Findings:** {{TODO:AI_ANALYSIS}}.
----
+#### Test OA008 Todoist connect button initiates OAuth redirect
+- **Test Code:** [OA008_Todoist_connect_button_initiates_OAuth_redirect.py](./OA008_Todoist_connect_button_initiates_OAuth_redirect.py)
+- **Test Error:** TEST FAILURE
 
-#### Test HLP007 resolveGoogleBoundary with null input returns null
-- **Test Code:** [HLP007_resolveGoogleBoundary_with_null_input_returns_null.py](./HLP007_resolveGoogleBoundary_with_null_input_returns_null.py)
-- **Test Visualization and Result:** https://www.testsprite.com/dashboard/mcp/tests/0f104a78-ccd7-4ba5-8df8-eb13fafddd53/f51bae34-31c6-4cab-acb4-c28e6394fb42
-- **Status:** ✅ Passed
-- **Analysis / Findings:** {{TODO:AI_ANALYSIS}}.
----
-
-#### Test HLP008 resolveGoogleBoundary with empty object returns null
-- **Test Code:** [HLP008_resolveGoogleBoundary_with_empty_object_returns_null.py](./HLP008_resolveGoogleBoundary_with_empty_object_returns_null.py)
-- **Test Visualization and Result:** https://www.testsprite.com/dashboard/mcp/tests/0f104a78-ccd7-4ba5-8df8-eb13fafddd53/997ce334-cc30-424c-a6a6-7358e4326f02
-- **Status:** ✅ Passed
-- **Analysis / Findings:** {{TODO:AI_ANALYSIS}}.
----
-
-#### Test HLP009 resolveGoogleBoundary prefers dateTime over date
-- **Test Code:** [HLP009_resolveGoogleBoundary_prefers_dateTime_over_date.py](./HLP009_resolveGoogleBoundary_prefers_dateTime_over_date.py)
-- **Test Visualization and Result:** https://www.testsprite.com/dashboard/mcp/tests/0f104a78-ccd7-4ba5-8df8-eb13fafddd53/1bedadd0-86f3-4d17-9361-ed68847a829c
-- **Status:** ✅ Passed
-- **Analysis / Findings:** {{TODO:AI_ANALYSIS}}.
----
-
-#### Test HLP010 resolveTodoistSchedule with due datetime
-- **Test Code:** [HLP010_resolveTodoistSchedule_with_due_datetime.py](./HLP010_resolveTodoistSchedule_with_due_datetime.py)
-- **Test Visualization and Result:** https://www.testsprite.com/dashboard/mcp/tests/0f104a78-ccd7-4ba5-8df8-eb13fafddd53/577ed04f-9291-4d54-a00e-f420aafe92c8
-- **Status:** ✅ Passed
-- **Analysis / Findings:** {{TODO:AI_ANALYSIS}}.
----
-
-#### Test HLP011 resolveTodoistSchedule with due date only (all-day)
-- **Test Code:** [HLP011_resolveTodoistSchedule_with_due_date_only_all_day.py](./HLP011_resolveTodoistSchedule_with_due_date_only_all_day.py)
-- **Test Visualization and Result:** https://www.testsprite.com/dashboard/mcp/tests/0f104a78-ccd7-4ba5-8df8-eb13fafddd53/c8d0fca6-7d38-43fd-b8c2-65e52853b222
-- **Status:** ✅ Passed
-- **Analysis / Findings:** {{TODO:AI_ANALYSIS}}.
----
-
-#### Test HLP012 resolveTodoistSchedule with deadline only
-- **Test Code:** [HLP012_resolveTodoistSchedule_with_deadline_only.py](./HLP012_resolveTodoistSchedule_with_deadline_only.py)
-- **Test Visualization and Result:** https://www.testsprite.com/dashboard/mcp/tests/0f104a78-ccd7-4ba5-8df8-eb13fafddd53/bdf062a1-af6d-4a28-a6d2-4a7831d8c4d0
-- **Status:** ✅ Passed
-- **Analysis / Findings:** {{TODO:AI_ANALYSIS}}.
----
-
-#### Test HLP013 resolveTodoistSchedule with no due or deadline returns null
-- **Test Code:** [HLP013_resolveTodoistSchedule_with_no_due_or_deadline_returns_null.py](./HLP013_resolveTodoistSchedule_with_no_due_or_deadline_returns_null.py)
-- **Test Visualization and Result:** https://www.testsprite.com/dashboard/mcp/tests/0f104a78-ccd7-4ba5-8df8-eb13fafddd53/d43e0392-4105-41e5-a4f1-8ef19763fd26
-- **Status:** ✅ Passed
-- **Analysis / Findings:** {{TODO:AI_ANALYSIS}}.
----
-
-#### Test HLP014 resolveTodoistSchedule prefers due datetime over deadline
-- **Test Code:** [HLP014_resolveTodoistSchedule_prefers_due_datetime_over_deadline.py](./HLP014_resolveTodoistSchedule_prefers_due_datetime_over_deadline.py)
-- **Test Visualization and Result:** https://www.testsprite.com/dashboard/mcp/tests/0f104a78-ccd7-4ba5-8df8-eb13fafddd53/5c7283bd-ca65-49b6-b3e5-56932e834f07
-- **Status:** ✅ Passed
-- **Analysis / Findings:** {{TODO:AI_ANALYSIS}}.
----
-
-#### Test HLP015 isTodoistTaskInRange task within range returns true
-- **Test Code:** [HLP015_isTodoistTaskInRange_task_within_range_returns_true.py](./HLP015_isTodoistTaskInRange_task_within_range_returns_true.py)
-- **Test Visualization and Result:** https://www.testsprite.com/dashboard/mcp/tests/0f104a78-ccd7-4ba5-8df8-eb13fafddd53/52def695-fb8c-4b73-9a8e-b57053d01501
-- **Status:** ✅ Passed
-- **Analysis / Findings:** {{TODO:AI_ANALYSIS}}.
----
-
-#### Test HLP016 isTodoistTaskInRange task outside range returns false
-- **Test Code:** [HLP016_isTodoistTaskInRange_task_outside_range_returns_false.py](./HLP016_isTodoistTaskInRange_task_outside_range_returns_false.py)
-- **Test Visualization and Result:** https://www.testsprite.com/dashboard/mcp/tests/0f104a78-ccd7-4ba5-8df8-eb13fafddd53/79dc91c8-6e66-4d27-8a04-8580edb9e029
-- **Status:** ✅ Passed
-- **Analysis / Findings:** {{TODO:AI_ANALYSIS}}.
----
-
-#### Test HLP017 isTodoistTaskInRange undated task excluded when includeUndated false
-- **Test Code:** [HLP017_isTodoistTaskInRange_undated_task_excluded_when_includeUndated_false.py](./HLP017_isTodoistTaskInRange_undated_task_excluded_when_includeUndated_false.py)
-- **Test Visualization and Result:** https://www.testsprite.com/dashboard/mcp/tests/0f104a78-ccd7-4ba5-8df8-eb13fafddd53/0e62f755-aa88-43df-bb4c-ab54b8037ce8
-- **Status:** ✅ Passed
-- **Analysis / Findings:** {{TODO:AI_ANALYSIS}}.
----
-
-#### Test HLP018 isTodoistTaskInRange undated task included when includeUndated true
-- **Test Code:** [HLP018_isTodoistTaskInRange_undated_task_included_when_includeUndated_true.py](./HLP018_isTodoistTaskInRange_undated_task_included_when_includeUndated_true.py)
-- **Test Visualization and Result:** https://www.testsprite.com/dashboard/mcp/tests/0f104a78-ccd7-4ba5-8df8-eb13fafddd53/21d0ec53-ecb6-4575-a448-0a14e20d9586
-- **Status:** ✅ Passed
-- **Analysis / Findings:** {{TODO:AI_ANALYSIS}}.
----
-
-#### Test HLP019 isTodoistTaskInRange task at range boundary (exact from) returns true
-- **Test Code:** [HLP019_isTodoistTaskInRange_task_at_range_boundary_exact_from_returns_true.py](./HLP019_isTodoistTaskInRange_task_at_range_boundary_exact_from_returns_true.py)
-- **Test Visualization and Result:** https://www.testsprite.com/dashboard/mcp/tests/0f104a78-ccd7-4ba5-8df8-eb13fafddd53/81dac0ce-fdd1-4a3a-adfc-92883a7ef2d5
-- **Status:** ✅ Passed
-- **Analysis / Findings:** {{TODO:AI_ANALYSIS}}.
----
-
-#### Test HLP020 unknown function returns error
-- **Test Code:** [HLP020_unknown_function_returns_error.py](./HLP020_unknown_function_returns_error.py)
-- **Test Visualization and Result:** https://www.testsprite.com/dashboard/mcp/tests/0f104a78-ccd7-4ba5-8df8-eb13fafddd53/8c0b60a4-8e04-447f-a081-94ce85d61133
-- **Status:** ✅ Passed
+ASSERTIONS:
+- Sign-in failed - error message 'Invalid email or password' displayed after submitting credentials.
+- Connect step not reached after sign-in; integrations (including the Todoist connect button) are not visible on the page.
+- OAuth redirect could not be verified because the Todoist connect button was not accessible.
+- **Test Visualization and Result:** https://www.testsprite.com/dashboard/mcp/tests/d4087612-700e-4787-bdea-ca5c33168d7b/0a75be8b-9685-45a3-84a1-403d21a7f599
+- **Status:** ❌ Failed
 - **Analysis / Findings:** {{TODO:AI_ANALYSIS}}.
 ---
 
 
 ## 3️⃣ Coverage & Matching Metrics
 
-- **100.00** of tests passed
+- **62.50** of tests passed
 
 | Requirement        | Total Tests | ✅ Passed | ❌ Failed  |
 |--------------------|-------------|-----------|------------|

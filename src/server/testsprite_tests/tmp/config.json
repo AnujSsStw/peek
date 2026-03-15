@@ -1,20 +1,29 @@
 {
   "status": "commited",
-  "type": "backend",
+  "type": "frontend",
   "scope": "codebase",
-  "localEndpoint": "http://localhost:3000",
-  "backendAuthType": "Bearer token",
-  "backendCredential": "q1Jqohp6VVu2MLPVVR1kxFty1eWjTOiD",
+  "localEndpoint": "http://localhost:3000/get-started",
+  "loginUser": "test@gmail.com",
+  "loginPassword": "test@gmail.com",
   "executionArgs": {
     "projectName": "server",
     "projectPath": "/Users/ani/personal/peek/src/server",
-    "testIds": [],
-    "additionalInstruction": "These are BACKEND HTTP tests for POST /api/test-helpers. This is a dev-only endpoint that exposes pure helper functions from google-cal.ts and todoist-task.ts for unit testing.\n\nCRITICAL:\n1. Every request is POST /api/test-helpers with Content-Type: application/json\n2. Request body: {\"fn\": \"functionName\", \"args\": {arguments}}\n3. Success: {\"result\": value} with status 200\n4. Error: {\"error\": \"message\"} with status 400\n5. Functions: normalizeRange, resolveGoogleBoundary, resolveTodoistSchedule, isTodoistTaskInRange",
+    "testIds": [
+      "OA001",
+      "OA002",
+      "OA003",
+      "OA004",
+      "OA005",
+      "OA006",
+      "OA007",
+      "OA008"
+    ],
+    "additionalInstruction": "These are frontend tests for the OAuth UI flow on the /get-started page. The page has a multi-step onboarding: Step 1 is login (email/password + Google OAuth button). After login, Step 2 shows connect integrations (Google Calendar + Todoist). Test account credentials: email test@test.com password test1234. The Google OAuth button text is \"Continue with Google\". When clicked it should redirect or show \"Redirecting...\" text. For connect step tests (OA006-OA008), first sign in with the test account to reach step 2.",
     "serverMode": "development",
     "envs": {
       "API_KEY": "sk-user-Z1QAXhWFsenM64CrrgODwbvc8PLK2YEYHr2MlZwmTsB8Sv0-z6noGS3n1Z8Tw2JCMYBNz8GiHpecAZPMZd_9-Jrt7DvMgKyA8Ts4_mfWdpQCOO77_BHXDGPKmZ7aHQiEwqc"
     }
   },
-  "serverPort": 61440,
-  "proxy": "http://96b3ec42-93db-471c-b7c1-9d6d55103732:lKKvOvudP5VQIC6pIN2VL924oMcjrHR2@tun.testsprite.com:8080"
+  "serverPort": 62055,
+  "proxy": "http://7f8a1467-50d3-4f71-b34e-9f25ee68cc30:9KK5b6OCAc0yh5VN9xBw84HmqRyb4UFC@tun.testsprite.com:8080"
 }

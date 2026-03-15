@@ -1,25 +1,68 @@
 version: "2"
-type: backend
+type: frontend
 tech_stack:
   - TypeScript
   - Next.js 16
+  - React 19
+  - Better Auth
+  - TanStack React Query
+routes:
+  - path: /
+    file: app/page.tsx
+    auth_required: false
+    description: Welcome/landing page
+  - path: /get-started
+    file: app/get-started/page.tsx
+    auth_required: false
+    description: Multi-step onboarding page with login, connect integrations, and widget selection
+  - path: /help
+    file: app/help/page.tsx
+    auth_required: false
+    description: Help and FAQ page
+  - path: /preview
+    file: app/preview/page.tsx
+    auth_required: false
+    description: Widget screenshot preview gallery
 features:
-  - name: Helper Function Test Endpoint
-    description: Dev-only endpoint that exposes pure utility functions from google-cal.ts and todoist-task.ts for unit testing
+  - name: OAuth Login Flow
+    description: Login step on get-started page with email/password form and Google OAuth button. Clicking Continue with Google redirects to Google's OAuth authorization page.
     files:
-      - app/api/test-helpers/route.ts
-      - lib/google-cal.ts
-      - lib/todoist-task.ts
-    endpoints:
+      - app/get-started/page.tsx
+      - lib/auth.ts
+      - lib/auth-client.ts
+    entry_route: /get-started
+    user_interactions:
+      - Fill email input field
+      - Fill password input field
+      - Click sign-in submit button
+      - Click Continue with Google button to initiate OAuth redirect
+      - Toggle between sign-in and sign-up modes
+      - In sign-up mode fill name, email, password fields
+    api_calls:
       - method: POST
-        path: /api/test-helpers
-        description: Invoke a named helper function with arguments and return the result
-        auth_required: false
-        request_schema:
-          body:
-            fn: string
-            args: object
-        response_schema:
-          "200": "{result: any}"
-          "400": "{error: string}"
-known_limitations: []
+        endpoint: /api/auth/sign-in/email
+      - method: POST
+        endpoint: /api/auth/sign-up/email
+      - method: GET
+        endpoint: /api/auth/sign-in/social?provider=google
+    auth_required: false
+  - name: Connect Integrations (OAuth)
+    description: After login, step 2 allows connecting Google Calendar and Todoist via OAuth. Each provider has a connect button that redirects to the provider's OAuth page.
+    files:
+      - app/get-started/page.tsx
+      - lib/auth.ts
+    entry_route: /get-started
+    user_interactions:
+      - Click Google Calendar connect button to initiate OAuth
+      - Click Todoist connect button to initiate OAuth
+      - Click Skip button to bypass connecting
+    api_calls:
+      - method: GET
+        endpoint: /api/auth/link-social?provider=google
+      - method: GET
+        endpoint: /api/auth/link-social?provider=todoist
+    auth_required: true
+known_limitations:
+  - issue: Cannot complete full OAuth flow as it requires real Google/Todoist credentials
+    location: app/get-started/page.tsx
+    impact: Can only test UI rendering, button presence, and redirect initiation

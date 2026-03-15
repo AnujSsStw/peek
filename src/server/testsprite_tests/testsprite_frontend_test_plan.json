@@ -1,98 +1,113 @@
 [
   {
-    "id": "PV001",
-    "title": "Preview page renders Contextual Hero section with all 9 variants",
-    "description": "Verify the preview page shows all Contextual Hero widget variants",
+    "id": "OA001",
+    "title": "Get-started page renders login step with Google OAuth button",
+    "description": "Verify the get-started page shows the login step with a Continue with Google button",
     "steps": [
-      "Navigate to /preview",
+      "Navigate to /get-started",
       "Wait for the page to fully load",
-      "Verify the heading 'Widget Screenshot Preview' is visible",
-      "Scroll to find the 'Contextual Hero' section heading",
-      "Verify the section contains widget preview images (img elements)",
-      "Count the number of widget images in the Contextual Hero section - there should be 9 variant previews",
-      "Verify all images have loaded successfully (no broken images, naturalWidth > 0)"
+      "Verify the page shows the login/sign-in step (step 1)",
+      "Look for a button containing the text 'Continue with Google'",
+      "Verify the Google button is visible and not disabled",
+      "Verify there is a Google 'G' icon/letter inside the button"
     ]
   },
   {
-    "id": "PV002",
-    "title": "Preview page renders Bento Box section with all 6 variants",
-    "description": "Verify the preview page shows all Bento Box widget variants",
+    "id": "OA002",
+    "title": "Get-started page renders email/password sign-in form",
+    "description": "Verify the login step shows email and password input fields along with the OAuth button",
     "steps": [
-      "Navigate to /preview",
+      "Navigate to /get-started",
       "Wait for the page to fully load",
-      "Scroll to find the 'Bento Box' section heading",
-      "Verify the section contains widget preview images",
-      "Count the number of widget images in the Bento Box section - there should be 6 variant previews",
-      "Verify all images have loaded successfully (naturalWidth > 0)"
+      "Verify an email input field is present (type='email' or placeholder containing 'email')",
+      "Verify a password input field is present (type='password')",
+      "Verify a submit button for email sign-in is present (text like 'Sign in' or 'Continue')",
+      "Verify the 'or' divider exists between the email form and the Google OAuth button"
     ]
   },
   {
-    "id": "PV003",
-    "title": "Preview page renders Timeline section with all 5 variants",
-    "description": "Verify the preview page shows all Timeline widget variants",
+    "id": "OA003",
+    "title": "Google OAuth button initiates redirect on click",
+    "description": "Verify clicking Continue with Google triggers a navigation away from the page",
     "steps": [
-      "Navigate to /preview",
+      "Navigate to /get-started",
       "Wait for the page to fully load",
-      "Scroll to find the 'Timeline' section heading (the standalone Timeline, not Timeline + Tasks)",
-      "Verify the section contains widget preview images",
-      "Count the number of widget images in the Timeline section - there should be 5 variant previews",
-      "Verify all images have loaded successfully"
+      "Find the 'Continue with Google' button",
+      "Click the 'Continue with Google' button",
+      "Wait briefly (2-3 seconds) for the redirect to initiate",
+      "Verify the page has navigated away from /get-started OR the button text changed to 'Redirecting...' OR the URL has changed to include 'accounts.google.com' or 'api/auth'"
     ]
   },
   {
-    "id": "PV004",
-    "title": "Preview page renders all 5 Timeline + Tasks sub-variant sections",
-    "description": "Verify the preview page shows all Timeline + Tasks sub-variant sections",
+    "id": "OA004",
+    "title": "Sign-up mode toggle works and shows name field",
+    "description": "Verify toggling between sign-in and sign-up modes works correctly",
     "steps": [
-      "Navigate to /preview",
+      "Navigate to /get-started",
       "Wait for the page to fully load",
-      "Scroll to find 'Timeline + Tasks' sections",
-      "Verify 'Inline' sub-variant section exists with 2 widget images (light, dark)",
-      "Verify 'Pinned' or 'Pinned Block' sub-variant section exists with 2 widget images",
-      "Verify 'Nested' or 'Nested Sub-tasks' sub-variant section exists with 2 widget images",
-      "Verify 'Floating' or 'Floating Card' sub-variant section exists with 2 widget images",
-      "Verify 'Progress' or 'Progress Header' sub-variant section exists with 2 widget images",
-      "Verify all images have loaded successfully"
+      "Look for a link or button to switch to sign-up mode (text like 'Sign up' or 'Create account' or 'Don't have an account')",
+      "Click the toggle to switch to sign-up mode",
+      "Verify a name input field appears (for new account creation)",
+      "Verify the email and password fields are still present",
+      "Verify the Google OAuth 'Continue with Google' button is still visible in sign-up mode"
     ]
   },
   {
-    "id": "PV005",
-    "title": "Preview page renders Minimalist Stack section with all 7 variants",
-    "description": "Verify the preview page shows all Minimalist Stack widget variants",
+    "id": "OA005",
+    "title": "Email sign-in with valid test account proceeds to next step",
+    "description": "Verify signing in with a valid test account moves to the connect step",
     "steps": [
-      "Navigate to /preview",
+      "Navigate to /get-started",
       "Wait for the page to fully load",
-      "Scroll to find the 'Minimalist Stack' section heading",
-      "Verify the section contains widget preview images",
-      "Count the number of widget images - there should be 7 variant previews",
-      "Verify all images have loaded successfully"
+      "Enter 'test@test.com' in the email input field",
+      "Enter 'test1234' in the password input field",
+      "Click the sign-in submit button",
+      "Wait for the authentication to complete (up to 5 seconds)",
+      "Verify the page has moved to step 2 (connect integrations) - look for text like 'Connect' or 'Google Calendar' or 'Todoist' provider options"
     ]
   },
   {
-    "id": "PV006",
-    "title": "Preview page renders Progress Ring, Companion Quote, Streak Flame, Daily Score sections",
-    "description": "Verify the preview page shows all remaining widget layout sections",
+    "id": "OA006",
+    "title": "Connect step shows Google Calendar and Todoist OAuth providers",
+    "description": "After login, verify the connect step displays both OAuth integration providers",
     "steps": [
-      "Navigate to /preview",
+      "Navigate to /get-started",
       "Wait for the page to fully load",
-      "Scroll to find the 'Progress Ring' section - verify it has 2 widget images (dark, light)",
-      "Scroll to find the 'Companion Quote' section - verify it has 2 widget images (warm, frost)",
-      "Scroll to find the 'Streak Flame' section - verify it has 2 widget images (fire, cool)",
-      "Scroll to find the 'Daily Score' section - verify it has 2 widget images (dark, light)",
-      "Verify all images across all sections have loaded successfully (no broken images)"
+      "Sign in with email 'test@test.com' and password 'test1234'",
+      "Wait for authentication to complete and the connect step to appear",
+      "Verify 'Google Calendar' provider option is visible with a connect button",
+      "Verify 'Todoist' provider option is visible with a connect button",
+      "Verify there is a 'Skip' or 'Next' button to bypass the connect step"
     ]
   },
   {
-    "id": "PV007",
-    "title": "Preview page total widget count matches expected 45 variants",
-    "description": "Verify the total number of widget preview images on the preview page",
+    "id": "OA007",
+    "title": "Google Calendar connect button initiates OAuth redirect",
+    "description": "Verify clicking the Google Calendar connect button triggers an OAuth redirect",
     "steps": [
-      "Navigate to /preview",
-      "Wait for the page to fully load with a longer timeout (30 seconds) since all widget images need to render",
-      "Count ALL widget preview img elements on the entire page",
-      "Verify the total count is at least 45 (9 contextual-hero + 6 bento-box + 5 timeline + 10 timeline-tasks + 7 minimalist-stack + 2 progress-ring + 2 companion-quote + 2 streak-flame + 2 daily-score)",
-      "Scroll through the entire page to trigger any lazy-loaded images",
-      "Verify no images are broken (check for error states or zero-size images)"
+      "Navigate to /get-started",
+      "Wait for the page to fully load",
+      "Sign in with email 'test@test.com' and password 'test1234'",
+      "Wait for the connect step to appear",
+      "Find the Google Calendar connect button",
+      "Click the Google Calendar connect button",
+      "Wait briefly (2-3 seconds)",
+      "Verify the page has navigated away OR the URL changed to include 'accounts.google.com' or 'api/auth'"
+    ]
+  },
+  {
+    "id": "OA008",
+    "title": "Todoist connect button initiates OAuth redirect",
+    "description": "Verify clicking the Todoist connect button triggers an OAuth redirect",
+    "steps": [
+      "Navigate to /get-started",
+      "Wait for the page to fully load",
+      "Sign in with email 'test@test.com' and password 'test1234'",
+      "Wait for the connect step to appear",
+      "Find the Todoist connect button",
+      "Click the Todoist connect button",
+      "Wait briefly (2-3 seconds)",
+      "Verify the page has navigated away OR the URL changed to include 'todoist.com' or 'api/auth'"
     ]
   }
 ]
