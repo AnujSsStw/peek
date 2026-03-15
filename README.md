@@ -2,6 +2,8 @@
 
 AI-powered personalized home screen widgets that synthesize your calendar, tasks, and weather into beautiful, contextually-aware glanceable cards.
 
+[![Watch the demo](thumbnail.png)](https://youtu.be/zxKaZ6f1Gjc)
+
 ## Overview
 
 Peek connects to your Google Calendar, Todoist, and local weather to generate smart widgets using AI. Each widget is tailored to your schedule, time of day, and current conditions — rendered as images and delivered to your home screen.
